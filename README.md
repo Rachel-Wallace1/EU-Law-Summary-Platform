@@ -29,15 +29,16 @@ EU-LAW-SUMMARY-PLATFORM/
 │   ├── Dockerfile
 │   ├── manage.py
 │   ├── requirements.txt
-│   ├── app/  # Django project folder
+│   ├── backend/  # Django project folder
 │   │   ├── settings.py
 │   │   ├── urls.py
-│   │   └── wsgi.py
-│   └── yourapp/  # Django app folder
+|   |   |-- wsgi.py
+│   │   └── asgi.py
+│   └── accounts/  # Django app folder
 │       ├── migrations/
 │       ├── models.py
-│       ├── views.py
-│       └── serializers.py
+│       ├── views.py        #log in/out, document api logic
+│       └── serializers.py  #create new user logic
 │
 ├── llm-model/  # Large Language Model (e.g., OpenAI API integration)
 │   ├── Dockerfile
