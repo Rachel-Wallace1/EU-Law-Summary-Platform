@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
 }
 
 .App-logo {
@@ -35,4 +34,14 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.nav-link a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav-link a:hover, .nav-link a:focus {
+  text-decoration: none;
+  color: black;
 }
