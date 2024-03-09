@@ -1,8 +1,30 @@
-# Getting Started with Create React App
+# About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+
+### Getting Started
+
+In the frontend di
+
+1. Install dependencies (found in package.json)
+```npm install```
+
+
+2. Run front end server in dev mode
+```npm start```
+
+3. Open [http://localhost:3000](http://localhost:3000) to view the frontend app in your browser
+- The page will reload when you make changes.\
+- You may also see any lint errors in the console.
+
+
+4. For production, use the following command to optimize build and minify for deployment:
+```npm run build```
+
+
+---
+
+# Other available commands:
 
 In the project directory, you can run:
 

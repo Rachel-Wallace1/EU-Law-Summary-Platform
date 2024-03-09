@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.aut import get_user_model
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 # Ensure we are using our custom user model

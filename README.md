@@ -54,3 +54,14 @@ EU-LAW-SUMMARY-PLATFORM/
     └-- store secrets & env locally inside secrets folder at root level (DO NOT CHECK INTO GITHUB)
 
 ```
+
+
+### Loading the frontend
+1. cd into the frontend folder
+2. run the following command to install project dependencies
+```npm install```
+3. after dependencies are installed, use the following command to start the front end dev server:
+```npm start```
+
+
+### Loading the backend
