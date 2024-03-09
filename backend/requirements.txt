@@ -1,4 +1,4 @@
 Django==4.2.7
 djangorestframework==3.14.0
-python-dotenv==1.0.1
-Python==3.10.8
+drf_yasg==1.21.7
+python==3.10

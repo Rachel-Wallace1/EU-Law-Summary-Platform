@@ -67,4 +67,8 @@ EU-LAW-SUMMARY-PLATFORM/
 ### Loading the backend
 1. cd into the backend folder
 2. run the following to install backend dependencies
-3. 
+```pip install -r requirements.txt```
+3. start the backend server with the following command:
+```python3 manage.py runserver```
+4. Once server is loaded, test the api calls at the following link: http://127.0.0.1:8000/swagger/
+
