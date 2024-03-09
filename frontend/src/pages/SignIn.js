@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './SignIn.css';
+import PageHeaderComponent from '../components/PageHeaderComponent';
 
 function SignIn() {
 const [formData, setFormData] = useState({
@@ -32,6 +34,8 @@ const handleSubmit = async (e) => {
 
 
 return (
+    <>
+    <PageHeaderComponent title="Sign In" />
     <form onSubmit={handleSubmit}>
     <input
         type="email"
@@ -51,6 +55,7 @@ return (
     />
     <button type="submit">Sign In</button>
     </form>
+    </>
 );
 }
 

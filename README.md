@@ -61,7 +61,10 @@ EU-LAW-SUMMARY-PLATFORM/
 2. run the following command to install project dependencies
 ```npm install```
 3. after dependencies are installed, use the following command to start the front end dev server:
-```npm start```
+```npm run start```
 
 
 ### Loading the backend
+1. cd into the backend folder
+2. run the following to install backend dependencies
+3. 
