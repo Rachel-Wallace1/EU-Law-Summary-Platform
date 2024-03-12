@@ -4,8 +4,7 @@
 - Install Django backend here
 
 # Dependencies to install
-- corsheaders
-- loadenv
+```pip install -r requirements.txt```
 
 # Commands to get started:
-```python3 manage.py run```
+```python3 manage.py runserver```
