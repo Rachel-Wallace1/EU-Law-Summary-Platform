@@ -4,3 +4,4 @@ drf_yasg==1.21.7
 django-cors-headers
 loadenv
 setuptools
+pymongo
