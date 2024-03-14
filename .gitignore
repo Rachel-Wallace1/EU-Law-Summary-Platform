@@ -3,9 +3,10 @@
 bin/
 lib/
 pyvenv.cfg
-
+db.sqlite3
 # Django #
 *.log
 *.pot
 *.pyc
 __pycache__
+backend/db.sqlite3

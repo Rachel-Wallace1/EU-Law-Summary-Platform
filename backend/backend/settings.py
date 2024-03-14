@@ -40,8 +40,16 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     "accounts",
+    "llm",
     'drf_yasg',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+}
+
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
