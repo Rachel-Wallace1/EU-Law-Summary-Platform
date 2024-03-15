@@ -26,4 +26,4 @@ class DocumentdDB:
 
         ##Find the json object with the same celexNumber
         ##(technically just finds the first law with the Id)
-        return col.find_one({"celexNumber" : celexNumber})
+        return col.find_one({"celexNumber" : celexNumber})["summary"]
