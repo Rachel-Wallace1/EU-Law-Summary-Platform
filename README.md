@@ -94,3 +94,15 @@ git add .
 git commit -m "your commit message"
 git push -u origin Backend-fix-project // -u sets remote upstream tracking; pushes local Backend-fix-project to remote `origin`.
 ```
+
+
+### docker-compose file
+The docker compose file helps the user to deploy the components of nonrtric control panel with one command.
+To run docker containers, run the following command:
+```shell
+docker-compose up
+```
+To remove docker containers, run the following command:
+```shell
+docker-compose down
+```
