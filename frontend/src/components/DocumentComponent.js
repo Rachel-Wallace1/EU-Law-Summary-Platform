@@ -1,7 +1,24 @@
 import React from 'react';
-import {Card, Container, Row, Col, Button} from 'react-bootstrap';
+import {Card, Container, Row, Col, Button, Form, Accordion} from 'react-bootstrap';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 
-function DocumentComponent() {
+function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionButton(eventKey, () =>
+      console.log('generate summary'),
+    );
+  
+    return (
+      <Button
+        variant="primary"
+        onClick={decoratedOnClick}
+      >
+        New Summary
+      </Button>
+    );
+  }
+
+  
+function DocumentComponent({ children, eventKey }) {
     const document = {
         title: "The common organization of agricultural markets in the EU",
         summaryOf: "Regulation (EU) No 1308/2013 — common organization of the markets in agricultural products",
@@ -12,7 +29,7 @@ function DocumentComponent() {
         ],
         status: "pending_review" // change this to publish and actionable buttons will be removed
     };
-
+      
     return (
         <Container>
             {document.status !== "published" && <Container>
@@ -22,14 +39,63 @@ function DocumentComponent() {
                     </Col>
                     <Col xs="auto">
                         <div className="d-flex gap-2">
-                            <Button variant="primary">New Summary</Button>
+                            
                             <Button variant="warning">Edit</Button>
                             <Button variant="success">Send</Button>
                         </div>
                     </Col>
                 </Row>
             </Container>}
+
             <Container fluid="md">
+                <Row>
+                <Card>
+                    <Accordion defaultActiveKey="0">
+                        
+                        <Card.Header>
+                        <CustomToggle eventKey="0">Click me!</CustomToggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="0">
+                        <Card.Body>
+                            <div key={`llm-model-radio`} className="mb-3">
+                                <Form.Check
+                                    inline
+                                    label="gpt4 LLM model"
+                                    name="llm-radio"
+                                    type='radio'
+                                    id={`inline-radio-1`}
+                                />
+                                <Form.Check
+                                    inline
+                                    label="2nd LLM model"
+                                    name="llm-radio"
+                                    type='radio'
+                                    id={`inline-radio-2`}
+                                />
+                            </div>
+                            
+                            <Form.Label htmlFor="celexId">Celex Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                id="celexId"
+                                aria-describedby="passwordHelpBlock"
+                            />
+                            
+            
+                            <Button name="generate-summary-button" variant="success">Generate summary</Button>
+                        </Card.Body>
+
+                        </Accordion.Collapse>
+                    
+
+                    </Accordion>
+                </Card>
+                </Row>
+            </Container>
+
+            <Container fluid="md">
+
+
                 <Row>
                     <Card>
                         <Card.Body>

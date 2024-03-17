@@ -8,8 +8,8 @@ mongoinstance = os.getenv('mongoinstance')
 class DocumentdDB:
     def __init__(self):
         ##Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
-        self.client = pymongo.MongoClient('mongodb://{}:{}@{}/?tls=true&tlsCAFile=global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false'.format(mongouser, mongopass, mongoinstance))
-        
+        self.client = pymongo.MongoClient('mongodb://{}:{}@{}/?tls=true&tlsCAFile=backend/global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false'.format(mongouser, mongopass, mongoinstance))
+
         ##Specify the database to be used
         self.db = self.client.eulaw
 
