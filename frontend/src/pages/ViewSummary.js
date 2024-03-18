@@ -1,20 +1,20 @@
 import React from 'react';
+import ViewDocumentComponent from "../components/ViewDocumentComponent";
 import { Container, Row, Col } from 'react-bootstrap';
 import PageHeaderComponent from "../components/PageHeaderComponent";
-import SummariesComponent from "../components/SummariesComponent";
 
 
-function Summaries() {
+function ViewSummary() {
     return (
         <Container className="summaries-page">
-            <PageHeaderComponent title={'Summaries'}/>
+            <PageHeaderComponent title={'View Summary'}/>
             <Row>
                 <Col>
-                    <SummariesComponent />
+                    <ViewDocumentComponent />
                 </Col>
             </Row>
         </Container>
     );
 }
 
-export default Summaries;
+export default ViewSummary;

@@ -4,8 +4,11 @@ import './App.css';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import NavBar from './components/NavBar';
-import Summaries from './pages/Summaries';
+import ViewSummary from './pages/ViewSummary';
 import HomePage from './pages/HomePage';
+import EditSummary from './pages/EditSummary';
+import NewSummary from './pages/NewSummary';
+import Summaries from "./pages/Summaries";
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/summaries" element={<Summaries />} />
+          <Route path="/summary/:celex/view" element={<ViewSummary />} />
+          <Route path="/summary/:celex/edit" element={<EditSummary />} />
+          <Route path="/summary/:celex/new" element={<NewSummary />} />
           {/* Add other routes as needed */}
         </Routes>
       </div>
