@@ -107,7 +107,7 @@ pdf_mp_summary = pdf_mp_summary.sort_values(
     by=["file_name", "page_number"]
 )  # sorting the dataframe by filename and page_number
 pdf_mp_summary.reset_index(inplace=True, drop=True)
-pdf_mp_summary.head()
+print(pdf_mp_summary.head())
 
 index = 2
 print("[Context]")
