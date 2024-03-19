@@ -14,21 +14,35 @@ const handleChange = (e) => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch('http://localhost:8000/signin/', { // Update to django URL later, or load as an environment variable
+    fetch('http://localhost:8000/api/signin/', { // update url for prod
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+        }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
     .then(data => {
         console.log('Success:', data);
-        // Store the logged-in user's token or session info if applicable
-        // Redirect user or show success message
+
+        // save the access and refresh tokens in local storage
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+
+        // Redirect the user to the summaries page upon successful sign-in
+        window.location.href = '/summaries';
     })
     .catch((error) => {
         console.error('Error:', error);
+        alert('There was an error signing in. Please try again.');  // Show an error message
     });
 };
 

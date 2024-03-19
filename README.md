@@ -95,9 +95,9 @@ git commit -m "your commit message"
 git push -u origin Backend-fix-project // -u sets remote upstream tracking; pushes local Backend-fix-project to remote `origin`.
 ```
 
+### Loading the entire app - docker-compose file
+The `docker-compose.yml` file helps the user to deploy both the frontend and backend with a single command. To get started, make sure to install Docker on your system, and have it running. Afterwards:
 
-### docker-compose file
-The docker compose file helps the user to deploy the components of nonrtric control panel with one command.
 To run docker containers, run the following command:
 ```shell
 docker-compose up
@@ -105,4 +105,8 @@ docker-compose up
 To remove docker containers, run the following command:
 ```shell
 docker-compose down
+```
+If new changes are not being reflected while coding, manually force a rebuild with the following command:
+```shell
+docker-compose up --build
 ```

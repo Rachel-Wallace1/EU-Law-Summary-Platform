@@ -9,22 +9,25 @@ import HomePage from './pages/HomePage';
 import EditSummary from './pages/EditSummary';
 import NewSummary from './pages/NewSummary';
 import Summaries from "./pages/Summaries";
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/summaries" element={<Summaries />} />
-          <Route path="/summary/:celex/view" element={<ViewSummary />} />
-          <Route path="/summary/:celex/edit" element={<EditSummary />} />
-          <Route path="/summary/:celex/new" element={<NewSummary />} />
-          {/* Add other routes as needed */}
-        </Routes>
+        <AuthProvider>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/summaries" element={<Summaries />} />
+            <Route path="/summary/:celex/view" element={<ViewSummary />} />
+            <Route path="/summary/:celex/edit" element={<EditSummary />} />
+            <Route path="/summary/:celex/new" element={<NewSummary />} />
+            {/* Add other routes as needed */}
+          </Routes>
+        </AuthProvider>
       </div>
     </Router>
   );

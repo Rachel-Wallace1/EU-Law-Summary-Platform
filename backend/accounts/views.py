@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from django.contrib.auth import authenticate, login, logout, get_user_model
 
+#jwt tokens
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 # swagger API
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -18,7 +21,6 @@ from django.utils.decorators import method_decorator
 # Obtain the custom user model
 User = get_user_model()
 
-@method_decorator(csrf_exempt, name='dispatch')
 class UserCreate(views.APIView):
     """
     User signup view.
@@ -36,6 +38,7 @@ class UserCreate(views.APIView):
         ),
         responses={201: 'User Created', 400: 'Invalid Input'}
     )
+    @csrf_exempt
     def post(self, request):
         with transaction.atomic():  # Ensures the operation is atomic
             serializer = UserSerializer(data=request.data)
@@ -46,36 +49,58 @@ class UserCreate(views.APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(views.APIView):
     """
     User login view.
     """
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email', 'password'],
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+            },
+        ),
+        responses={200: 'User Logged In', 401: 'Invalid Credentials'}
+    )
+    @csrf_exempt
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            return Response({'message': 'User Logged In'})
+
+            # Generate JWT token
+            token_serializer = TokenObtainPairSerializer(data=request.data)
+            if token_serializer.is_valid():
+                return Response(token_serializer.validated_data, status=status.HTTP_200_OK)
+            return Response(token_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             # Providing more generic message to avoid enumeration attacks
             return Response({'message': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(views.APIView):
     """
     User logout view.
     """
+    @swagger_auto_schema(
+        responses={200: 'User Logged Out'}
+    )
+    @csrf_exempt
     def get(self, request):
         logout(request)
         return Response({'message': 'User Logged Out'})
 
-@method_decorator(csrf_exempt, name='dispatch')
 class HelloWorld(views.APIView):
     """
     Sample HelloWorld view to test the API.
     """
+    @swagger_auto_schema(
+        responses={200: 'Hello World GET request is working!'}
+    )
+    @csrf_exempt
     def get(self, request):
         return Response({'message': 'Hello World GET request is working!'})
 
