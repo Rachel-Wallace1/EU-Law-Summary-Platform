@@ -13,29 +13,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import OpenAIChatResponse
 from .serializers import OpenAIChatResponseSerializer
-from openai import AsyncAzureOpenAI
-import asyncio
 
-async def openai_gpt4_response(user_input):
-    api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
-    api_key= os.getenv("AZURE_OPENAI_API_KEY")
-    deployment_name = 'gpt4-test'
-    api_version = '2023-12-01-preview' # this might change in the future
-
-    client = AsyncAzureOpenAI(
-        api_key=api_key,
-        api_version=api_version,
-        base_url=f"{api_base}/openai/deployments/{deployment_name}"
-
-    )
-    response = await client.chat.completions.create(
-        model=deployment_name,
-        messages=[
-            {"role": "system", "content": user_input},
-        ],
-        max_tokens=999
-    )
-    return response
 class sample_output(APIView):
     """
     Returns an output of sample summary without API 
@@ -55,8 +33,24 @@ class OpenAIChatAPIPostView(APIView):
     def post(self, request, *args, **kwargs):
         # Extract data from the request
         user_input = request.data.get('input_message', '')
-        response = asyncio.run(openai_gpt4_response(user_input))
+        api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
+        api_key= os.getenv("AZURE_OPENAI_API_KEY")
+        deployment_name = 'gpt4-test'
+        api_version = '2023-12-01-preview' # this might change in the future
 
+        client = AzureOpenAI(
+            api_key=api_key,
+            api_version=api_version,
+            base_url=f"{api_base}/openai/deployments/{deployment_name}"
+
+        )
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": user_input},
+            ],
+            max_tokens=999
+        )
         summary = response.choices[0].message.content
         # Check if the request was successful
         if response.object == 'chat.completion':
@@ -74,3 +68,4 @@ class OpenAIChatAPIPostView(APIView):
 
         #return Response({'message': summary})
         
+
