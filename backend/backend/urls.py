@@ -41,5 +41,7 @@ urlpatterns = [
     path('api/summaries/', include('llm.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('edit/<str:celexNumber>', views.Database.edit, name="edit")
+    path('edit/<str:celexNumber>', views.Database.edit, name="edit"),
+    path('update/', views.Database.updateSummary, name="updateSummary"),
+    path('submit/', views.Database.submit, name="submit")
     ]
