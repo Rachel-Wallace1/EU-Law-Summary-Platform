@@ -110,3 +110,12 @@ If new changes are not being reflected while coding, manually force a rebuild wi
 ```shell
 docker-compose up --build
 ```
+
+
+### Github Action workflow
+Our GitHub repository consists of 1 frontend application and 1 backend application and the Github Action CI/CD pipeline is to build two container images, upload the container images to ECR, and update an ECS Task Definition for every commit and pull requests to the GitHub repository.
+
+This architecture (except the AWS CodeBuild) represents a complete CI/CD pipeline that uses a GitHub workflow to automatically coordinate building, testing, and deploying an application to ECS for every commit to the repository.
+
+![github](github-workflow.png)
+
