@@ -4,12 +4,15 @@ import datetime
 
 mongouser = os.getenv('mongouser')
 mongopass = os.getenv('mongopass')
-mongoinstance = os.getenv('mongoinstance')
+# mongoinstance = os.getenv('mongoinstance')
+mongoinstance = os.getenv('mongolocal')
+# mongoquerystring = os.getenv('mongoquerystring')
+mongoquerystring = os.getenv('mongoquerystringlocal')
 
 class DocumentdDB:
     def __init__(self):
         ##Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
-        self.client = pymongo.MongoClient('mongodb://{}:{}@{}/?tls=true&tlsCAFile=backend/global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false'.format(mongouser, mongopass, mongoinstance))
+        self.client = pymongo.MongoClient('mongodb://{}:{}@{}/?{}'.format(mongouser, mongopass, mongoinstance, mongoquerystring))
 
         ##Specify the database to be used
         self.db = self.client.eulaw
