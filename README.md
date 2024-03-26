@@ -119,3 +119,31 @@ This architecture (except the AWS CodeBuild) represents a complete CI/CD pipelin
 
 ![github](github-workflow.png)
 
+
+### How to interact with AI on local environment (Temporary: Will remove/update later)
+1. Get a openAI key and export to environment variable
+Run this in the terminal
+```bash
+export OPENAI_API_KEY="sk-"
+```
+In the same terminal, start the python backend app
+2. Start the front end app in a second terminal
+
+3. Go to the endpoint http://localhost:3000/generate_new_summary
+
+4. Example prompt to enter:
+```bash
+Write a summary for Regulation (EU) 2021/2115 of the European Parliament and of the Council of 2 December 2021 establishing rules on support for strategic plans to be drawn up by Member States under the common agricultural policy (CAP Strategic Plans) and financed by the European Agricultural Guarantee Fund (EAGF) and by the European Agricultural Fund for Rural Development (EAFRD) and repealing Regulations (EU) No 1305/2013 and (EU) No 1307/2013 
+In this format:
+1. Summary 
+2. WHAT IS THE AIM OF THE REGULATION?
+3. KEY POINTS
+4. FROM WHEN DOES THE REGULATION APPLY?
+5. MAIN DOCUMENT
+6. RELATED DOCUMENTS
+```
+5. After few seconds, output will show:
+
+
+![github](new_summary2.png)
+

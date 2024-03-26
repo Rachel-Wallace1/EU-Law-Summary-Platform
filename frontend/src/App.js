@@ -8,6 +8,8 @@ import ViewSummary from './pages/ViewSummary';
 import HomePage from './pages/HomePage';
 import EditSummary from './pages/EditSummary';
 import NewSummary from './pages/NewSummary';
+import GenerateNewSummary from './pages/GenerateNewSummary';
+
 import Summaries from "./pages/Summaries";
 import { AuthProvider } from './components/AuthContext';
 
@@ -25,6 +27,7 @@ function App() {
             <Route path="/summary/:celex/view" element={<ViewSummary />} />
             <Route path="/summary/:celex/edit" element={<EditSummary />} />
             <Route path="/summary/:celex/new" element={<NewSummary />} />
+            <Route path="/generate_new_summary" element={<GenerateNewSummary />} />
             {/* Add other routes as needed */}
           </Routes>
         </AuthProvider>
