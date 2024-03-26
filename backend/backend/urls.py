@@ -43,5 +43,7 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('edit/<str:celexNumber>', views.Database.edit, name="edit"),
     path('update/', views.Database.updateSummary, name="updateSummary"),
-    path('submit/', views.Database.submit, name="submit")
+    path('submit/', views.Database.submit, name="submit"),
+    path('fetchAll', views.Database.fetchAll, {'page':None}, name='fetchAll'),
+    path('fetchAll/<int:page>', views.Database.fetchAll, name='fetchAll')
     ]

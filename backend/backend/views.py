@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import Http404, HttpResponseServerError
+from django.http import Http404, HttpResponseServerError, JsonResponse
 
 import json
 
@@ -22,11 +22,12 @@ class Database:
         try:
             celexNumber = json_data["celexNumber"]
             author = json_data["author"]
+            status = json_data["status"]
             updatedSummary = json_data["summary"]
         except KeyError:
             HttpResponseServerError("Malformed data in request")
 
-        x = Database.docdb.updateSummary(celexNumber, author, updatedSummary)
+        x = Database.docdb.updateSummary(celexNumber, author, status, updatedSummary)
 
         return render(request, "success.html", {"updatedSummary" : x})
     
@@ -35,10 +36,19 @@ class Database:
 
         try:
             celexNumber = json_data["celexNumber"]
+            title = json_data["title"]
             summary = json_data["summary"]
         except KeyError:
             HttpResponseServerError("Malformed data in request")
 
-        Database.docdb.insertSummary(celexNumber, summary)
+        Database.docdb.insertSummary(celexNumber, title, summary)
 
-        return render(request, "success.html", {"updatedSummary" : "nice submission"})
+        return JsonResponse({"updatedSummary" : "nice submission"})
+    
+    def fetchAll(request, page=None):
+        if page is None:
+            page = 0
+        
+        summaries = Database.docdb.fetchAll(page)
+
+        return JsonResponse(json.loads(summaries), safe=False)

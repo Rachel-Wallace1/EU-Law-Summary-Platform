@@ -1,6 +1,7 @@
 import pymongo
 import os
 import datetime
+from bson.json_util import dumps, loads
 
 mongouser = os.getenv('mongouser')
 mongopass = os.getenv('mongopass')
@@ -11,31 +12,34 @@ mongoquerystring = os.getenv('mongoquerystringlocal')
 
 class DocumentdDB:
     def __init__(self):
-        ##Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
+        #Create a MongoDB client, open a connection to Amazon DocumentDB as a replica set and specify the read preference as secondary preferred
         self.client = pymongo.MongoClient('mongodb://{}:{}@{}/?{}'.format(mongouser, mongopass, mongoinstance, mongoquerystring))
 
-        ##Specify the database to be used
+        #Specify the database to be used
         self.db = self.client.eulaw
 
-    def insertSummary(self, celexNumber, summary):
-        ##Specify the collection to be used
+    def insertSummary(self, celexNumber, title, summary):
+        #Specify the collection to be used
         col = self.db.summaries
 
-        ##Insert a single document
+        #Insert a single document
         col.insert_one(
             {
                 "celexNumber" : celexNumber,
+                "title" : title,
+                "status" : "New",
+                "owner" : "",
                 "current" : {
                     "v" : 1,
                     "author" : "LegalBot",
-                    "timestamp" : datetime.datetime.now(),
+                    "timestamp" : datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                     "summary" : summary
                 },
                 "prev" : []
             }
         )
 
-    def updateSummary(self, celexNumber, author, updatedSummary):
+    def updateSummary(self, celexNumber, author, status, updatedSummary):
         col = self.db.summaries
 
         #Fetch the entire json doc
@@ -44,32 +48,52 @@ class DocumentdDB:
         #Increment the version number
         newVersion = str(int(doc["current"]["v"]) + 1)
 
+        #Move the previous current summary to the prev list
         doc["prev"].append(doc["current"])
 
+        #Update the status if changed
+        doc["status"] = status
+        
         doc["current"] = {
             "v"  : newVersion,
             "author" : author,
-            "timestamp" : datetime.datetime.now(),
+            "timestamp" : datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
             "summary" : updatedSummary
         }
 
+        #Insert the updated document
         result = col.replace_one({"celexNumber" : celexNumber}, doc, upsert=True)
         
-        if result.modified_count is 1:
-            print("Update worked")
+        if result.modified_count != 1:
+            print("Update unsuccesful")
 
+        #Return the new document
         return col.find_one({"celexNumber" : celexNumber})
 
 
     def getSummary(self, celexNumber):
-        ##Specify the collection to be used
+        #Specify the collection to be used
         col = self.db.summaries
 
-        ##Find the json object with the same celexNumber
-        ##(technically just finds the first law with the Id)
+        #Find the json object with the same celexNumber
+        #(technically just finds the first law with the Id)
         summary = col.find_one({"celexNumber" : celexNumber})
 
         if summary is None:
             return None
         
         return summary["current"]["summary"]
+    
+    def fetchAll(self, page):
+        #Specify the collection to be used
+        col = self.db.summaries
+
+        #For pagination we may want to skip some pages of results
+        numberToSkip = 10 * page
+
+        #Find the json object with the same celexNumber
+        #(technically just finds the first law with the Id)
+        summaries = col.find({}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "current.timestamp" : 1, "status" : 1}, skip=numberToSkip, limit=10)
+        
+        #Dump is used to convert it from the pymongo cursor to a json dict
+        return dumps(summaries)
