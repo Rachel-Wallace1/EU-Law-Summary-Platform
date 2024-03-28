@@ -45,5 +45,6 @@ urlpatterns = [
     path('update/', views.Database.updateSummary, name="updateSummary"),
     path('submit/', views.Database.submit, name="submit"),
     path('fetchAll', views.Database.fetchAll, {'page':None}, name='fetchAll'),
-    path('fetchAll/<int:page>', views.Database.fetchAll, name='fetchAll')
+    path('fetchAll/<int:page>', views.Database.fetchAll, name='fetchAll'),
+    path('delete', views.Database.delete, name="delete")
     ]

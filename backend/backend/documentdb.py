@@ -68,7 +68,7 @@ class DocumentdDB:
             print("Update unsuccesful")
 
         #Return the new document
-        return col.find_one({"celexNumber" : celexNumber})
+        return self.getSummary(celexNumber)
 
 
     def getSummary(self, celexNumber):
@@ -77,13 +77,13 @@ class DocumentdDB:
 
         #Find the json object with the same celexNumber
         #(technically just finds the first law with the Id)
-        summary = col.find_one({"celexNumber" : celexNumber})
+        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "current" : 1})
 
         if summary is None:
             return None
         
-        return summary["current"]["summary"]
-    
+        return dumps(summary)
+
     def fetchAll(self, page):
         #Specify the collection to be used
         col = self.db.summaries
@@ -97,3 +97,14 @@ class DocumentdDB:
         
         #Dump is used to convert it from the pymongo cursor to a json dict
         return dumps(summaries)
+
+    def delete(self, celexNumber):
+        #Specify the collection to be used
+        col = self.db.summaries
+
+        result = col.delete_one({"celexNumber" : celexNumber})
+
+        if result.acknowledged != True:
+            return "Deletion unsuccessful"
+
+        return "Deletion successful"
