@@ -120,6 +120,7 @@ This architecture (except the AWS CodeBuild) represents a complete CI/CD pipelin
 ![github](github-workflow.png)
 
 
+
 ### How to interact with AI on local environment (Temporary: Will remove/update later)
 1. Get a openAI key and export to environment variable
 Run this in the terminal
@@ -143,7 +144,8 @@ In this format:
 6. RELATED DOCUMENTS
 ```
 5. After few seconds, output will show:
-
+6. Enter celexId
+7. Enter title
+8. Click button "save to database"
 
 ![github](new_summary2.png)
-

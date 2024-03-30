@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import Http404, HttpResponseServerError, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 import json
 
@@ -35,6 +36,7 @@ class Database:
         return JsonResponse(json.loads(x), safe=False)
     
     @require_http_methods(["POST"])
+    @csrf_exempt
     def submit(request):
         json_data = json.loads(request.body)
 
@@ -70,3 +72,12 @@ class Database:
         x = Database.docdb.delete(celexNumber)
 
         return JsonResponse({"Submission status" : x})
+    
+    @require_http_methods(["GET"])
+    def dumpAll(request, page=None):
+        if page is None:
+            page = 0
+
+        summaries = Database.docdb.dumpAll(page)
+
+        return JsonResponse(json.loads(summaries), safe=False)    

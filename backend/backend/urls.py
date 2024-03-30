@@ -38,7 +38,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include('accounts.urls')),
-    path('api/summaries/', include('llm.urls')),
+    path('summaries/', include('llm.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('edit/<str:celexNumber>', views.Database.edit, name="edit"),
@@ -46,5 +46,6 @@ urlpatterns = [
     path('submit/', views.Database.submit, name="submit"),
     path('fetchAll', views.Database.fetchAll, {'page':None}, name='fetchAll'),
     path('fetchAll/<int:page>', views.Database.fetchAll, name='fetchAll'),
-    path('delete', views.Database.delete, name="delete")
+    path('delete', views.Database.delete, name="delete"),
+    path('dumpAll/', views.Database.dumpAll, {'page':None}, name='dumpAll'),
     ]

@@ -93,16 +93,6 @@ class LogoutView(views.APIView):
         logout(request)
         return Response({'message': 'User Logged Out'})
 
-class HelloWorld(views.APIView):
-    """
-    Sample HelloWorld view to test the API.
-    """
-    @swagger_auto_schema(
-        responses={200: 'Hello World GET request is working!'}
-    )
-    @csrf_exempt
-    def get(self, request):
-        return Response({'message': 'Hello World GET request is working!'})
 
 
 # method to see all users in the database

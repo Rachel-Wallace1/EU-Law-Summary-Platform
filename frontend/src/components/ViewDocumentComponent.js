@@ -90,6 +90,10 @@ function ViewDocumentComponent({celex}) {
         navigate(`/summary/${document.celex}/new`, {state: {document}})
     }
 
+
+    const handleGenerateNewSummaryClick = () => {
+        navigate(`/generate_new_summary`)
+    }
     return (
         <Container>
             {document.status !== "published" && <Container>
@@ -99,6 +103,9 @@ function ViewDocumentComponent({celex}) {
                     </Col>
                     <Col xs="auto">
                         <div className="d-flex gap-2">
+                            <Button variant="primary" onClick={handleGenerateNewSummaryClick}>
+                                Generate Summary
+                            </Button>
                             <Button variant="primary" onClick={() => setModalShow(true)}>
                                 New Summary
                             </Button>

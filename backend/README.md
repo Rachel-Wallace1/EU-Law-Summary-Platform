@@ -50,6 +50,6 @@ python3 manage.py runserver
 
 4. Run the post api to generate a summary:
 ```shell
-curl -X POST http://localhost:8000/api/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
+curl -X POST http://localhost:8000/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
 
 ```

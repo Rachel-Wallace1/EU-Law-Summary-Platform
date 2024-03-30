@@ -9,7 +9,6 @@ import HomePage from './pages/HomePage';
 import EditSummary from './pages/EditSummary';
 import NewSummary from './pages/NewSummary';
 import GenerateNewSummary from './pages/GenerateNewSummary';
-
 import Summaries from "./pages/Summaries";
 import { AuthProvider } from './components/AuthContext';
 
