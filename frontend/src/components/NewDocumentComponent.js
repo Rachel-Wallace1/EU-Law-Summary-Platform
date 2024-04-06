@@ -18,7 +18,7 @@ function NewDocumentComponent({document}) {
     };
 
     const handleCancelClick = () => {
-        navigate(`/summary/${document.celex}/view`)
+        navigate(`/ui/summary/${document.celex}/view`)
     };
 
     return (<Container>

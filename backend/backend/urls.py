@@ -48,4 +48,6 @@ urlpatterns = [
     path('fetchAll/<int:page>', views.Database.fetchAll, name='fetchAll'),
     path('delete', views.Database.delete, name="delete"),
     path('dumpAll/', views.Database.dumpAll, {'page':None}, name='dumpAll'),
-    ]
+    path('health/', views.Health.health, name='health'),
+
+]

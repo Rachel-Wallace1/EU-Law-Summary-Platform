@@ -102,16 +102,16 @@ function ViewDocumentComponent({celex}) {
     }, [])
 
     const handleEditClick = () => {
-        navigate(`/summary/${document.celexNumber}/edit`, {state: {document}})
+        navigate(`/ui/summary/${document.celexNumber}/edit`, {state: {document}})
     }
 
     const handleGenerateSummaryClick = () => {
-        navigate(`/summary/${document.celexNumber}/new`, {state: {document}})
+        navigate(`/ui/summary/${document.celexNumber}/new`, {state: {document}})
     }
 
 
     const handleGenerateNewSummaryClick = () => {
-        navigate(`/generate_new_summary`)
+        navigate(`/ui/generate_new_summary`)
     }
     return (
         <Container>

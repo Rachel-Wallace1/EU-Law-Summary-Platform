@@ -38,7 +38,7 @@ const handleSubmit = async (e) => {
         localStorage.setItem('refresh_token', data.refresh);
 
         // Redirect the user to the summaries page upon successful sign-in
-        window.location.href = '/summaries';
+        window.location.href = '/ui/summaries';
     })
     .catch((error) => {
         console.error('Error:', error);

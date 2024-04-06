@@ -29,7 +29,7 @@ function GenerateNewSummaryComponent({document}) {
                     input_message: inputText,
                 })
             });
-    
+            
             const summaryData = await summary.json();
             setsummary(summaryData);
             setIndex(0); // Reset index for incremental display
@@ -72,7 +72,7 @@ function GenerateNewSummaryComponent({document}) {
     };
 
     const handleCancelClick = () => {
-        navigate(`/summaries`)
+        navigate(`/ui/summaries`)
     };
 
 

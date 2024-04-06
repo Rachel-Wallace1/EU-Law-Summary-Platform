@@ -25,16 +25,16 @@ function NavBar() {
                         // if not logged in, show the sign up and sign in links
                         <>
                             <Nav.Link as="div">
-                                <Link to="/Summaries" className="nav-link">View Summaries</Link> {/* Adjust the className */}
+                                <Link to="/ui/Summaries" className="nav-link">View Summaries</Link> {/* Adjust the className */}
                             </Nav.Link>
                             <Nav.Link as="div">
-                                <Link to="/generate_new_summary" className="nav-link">Generate Summaries</Link> {/* Adjust the className */}
+                                <Link to="/ui/generate_new_summary" className="nav-link">Generate Summaries</Link> {/* Adjust the className */}
                             </Nav.Link>
                             <Nav.Link as="div">
-                                <Link to="/signup" className="nav-link">Sign Up</Link> {/* Adjust the className */}
+                                <Link to="/ui/signup" className="nav-link">Sign Up</Link> {/* Adjust the className */}
                             </Nav.Link>
                             <Nav.Link as="div">
-                                <Link to="/signin" className="nav-link">Sign In</Link> {/* Adjust the className */}
+                                <Link to="/ui/signin" className="nav-link">Sign In</Link> {/* Adjust the className */}
                             </Nav.Link>
                         </>
                     )}

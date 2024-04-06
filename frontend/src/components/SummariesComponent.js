@@ -8,7 +8,7 @@ function SummariesComponent() {
     useEffect(() => {
         const fetchSummaryList = async () => {
             let allData = [];
-            let pageIndex = 1;
+            let pageIndex = 0;
             let hasMoreData = true;
 
             try {

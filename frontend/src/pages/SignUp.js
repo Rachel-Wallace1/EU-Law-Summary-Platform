@@ -37,7 +37,7 @@ function SignUp() {
             console.log('Success:', data);
             // Redirect user or show success message
             // redirect to sign in page
-            window.location.href = '/signin';
+            window.location.href = '/ui/signin';
         })
         .catch((error) => {
             console.error('Error:', error);

@@ -28,19 +28,23 @@ name: Deploy to Amazon ECR
 
 on:
   push:
-    branches: [ "devops" ]
+    branches: [ "devops2" ]
   pull_request:
-    branches: [ "devops" ]
+    branches: [ "devops2" ]
 
 env:
-  AWS_REGION: us-west-2                   # set this to your preferred AWS region, e.g. us-west-1
-  ECS_CLUSTER: eu-law-cluster
+  AWS_REGION: us-west-2                    
+  ECS_CLUSTER: ecs-cluster-0330
 
-  ECR_REPOSITORY_FRONTEND: eu-law-frontend         # set this to your Amazon ECR repository name   
-  ECR_REPOSITORY_BACKEND: eu-law-ecr-registry         # set this to your Amazon ECR repository name                                           
+  ECR_REPOSITORY_BACKEND: backend-ecr     
+  ECR_REPOSITORY_FRONTEND: frontend-ecr     
 
-  ECS_SERVICE_FRONTEND: eu-law-service-frontend
-  ECS_SERVICE_BACKEND: eu-law-service-backend
+  ECS_SERVICE_BACKEND: eulaw-service-python
+  
+  TASK-DEF_BACKEND: eulaw-python-task-definition
+  CONTAINER_BACKEND: backend                                               
+  
+  ECS_SERVICE_FRONTEND: eulaw-service-react
 
 permissions:
   contents: read
@@ -62,24 +66,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
 
-
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push frontend image to Amazon ECR
-      id: build-image-frontend
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        echo "Build a docker container and push it to ECR" 
-        pwd
-        cd frontend
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG .
-        echo "pushing frontend image to ECR"
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Build, tag, and push backend image to Amazon ECR
       id: build-image-backend
@@ -95,21 +84,54 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    - name: Download frontend task definition
+    - name: Build, tag, and push frontend image to Amazon ECR
+      id: build-image-frontend
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
       run: |
-        aws ecs describe-task-definition --task-definition eu-law-task-def-frontend --query taskDefinition > task-definition-frontend.json
+        echo "Build a docker container and push it to ECR" 
+        pwd
+        cd frontend
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG .
+        echo "pushing backend image to ECR"
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Download backend task definition
       run: |
-        aws ecs describe-task-definition --task-definition eu-law-task-def-backend --query taskDefinition > task-definition-backend.json
+        aws ecs describe-task-definition --task-definition eulaw-python-task-definition --query taskDefinition > task-definition-backend.json
+        cat task-definition-backend.json | grep -A 5 containerDefinitions 
 
-        
+
+    - name: Download frontend task definition
+      run: |
+        aws ecs describe-task-definition --task-definition eu-task-definition-react --query taskDefinition > task-definition-frontend.json
+
+
+    - name: For backend app, fill in the new image ID in the Amazon ECS task definition
+      id: task-def-backend
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition-backend.json
+        container-name: python
+        image: ${{ steps.build-image-backend.outputs.image }}
+
+    - name: For backend app, deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-backend.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_BACKEND }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+
+    
     - name: For frontend app, fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition-frontend.json
-        container-name: eu-law-frontend
+        container-name: react
         image: ${{ steps.build-image-frontend.outputs.image }}
 
     - name: For frontend app, deploy Amazon ECS task definition
@@ -121,21 +143,6 @@ jobs:
         wait-for-service-stability: true
 
 
-    - name: For backend app, fill in the new image ID in the Amazon ECS task definition
-      id: task-def2
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition-backend.json
-        container-name: eu-law-backend-app 
-        image: ${{ steps.build-image-backend.outputs.image }}
-
-    - name: For backend app, deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def2.outputs.task-definition }}
-        service: ${{ env.ECS_SERVICE_BACKEND }}
-        cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
 
 
 
