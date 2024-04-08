@@ -62,7 +62,7 @@ class DocumentdDB:
         }
 
         #Insert the updated document
-        result = col.replace_one({"celexNumber" : celexNumber}, doc, upsert=True)
+        result = col.replace_one({"celexNumber" : celexNumber}, doc)
         
         if result.modified_count != 1:
             print("Update unsuccesful")
@@ -121,4 +121,70 @@ class DocumentdDB:
         summaries = col.find()
 
         #Dump is used to convert it from the pymongo cursor to a json dict
-        return dumps(summaries)   
+        return dumps(summaries)
+    
+    def submitAnnotation(self, celexNumber, annotation):
+        #Specify the collection to be used.
+        #Want to use a different collection than the
+        #one that is used for the summaries
+        col = self.db.annotations
+
+        #Add the celexNumber
+        annotation["celexNumber"] = celexNumber
+
+        #Insert the annotation
+        result = col.insert_one(annotation)
+
+        if result.acknowledged != True:
+            return "failure"
+
+        return "success"
+    
+    def updateAnnotation(self, celexNumber, annotation):
+        #Specify the collection to be used.
+        col = self.db.annotations
+
+        #Add the celexNumber
+        annotation["celexNumber"] = celexNumber
+
+        #Insert the updated annotation
+        result = col.replace_one({"id" : annotation["id"]}, annotation)
+
+        if result.acknowledged != True:
+            return "failure"
+
+        return "success"
+
+    def fetchAnnotations(self, celexNumber):
+        #Specify the collection to be used.
+        col = self.db.annotations
+
+        #Find all annotations with the same celexNumber field
+        annotations = col.find({"celexNumber" : celexNumber}, {"_id" : 0})
+
+        #Dump is used to convert it from the pymongo cursor to a json dict
+        return dumps(annotations)
+    
+    def deleteAnnotation(self, annotationId):
+        #Specify the collection to be used.
+        col = self.db.annotations
+        
+        #Delete specific annotation
+        result = col.delete_one({"id" : annotationId})
+
+        if result.acknowledged != True:
+            return "Deletion unsuccessful"
+    
+        return "Deletion successful"
+    
+    def deleteAllAnnotations(self, celexNumber):
+        #Specify the collection to be used.
+        col = self.db.annotations
+
+        #Delete all annotations with the same celexNumber field
+        result = col.delete_many({"celexNumber" : celexNumber})
+
+        if result.acknowledged != True:
+            return "Deletion unsuccessful"
+    
+        return "Deletion successful"
