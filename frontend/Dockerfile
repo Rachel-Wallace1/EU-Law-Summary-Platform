@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
 # Copy the remaining application code to the working directory
 COPY . .
@@ -16,8 +16,11 @@ COPY . .
 # Build the React app for production
 RUN npm run build
 
-# Expose the port on which the React app will run (default is 3000)
+# Install serve globally to serve the built React app
+RUN npm install -g serve
+
+# Expose the port on which the React app will run
 EXPOSE 3000
 
-# Run the React app
-CMD ["npm", "start"]
+# Command to run the React app
+CMD ["serve", "-s", "build", "-l", "3000"]

@@ -14,7 +14,7 @@ const handleChange = (e) => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch('http://localhost:8000/api/signin/', { // update url for prod
+    fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/signin/`, { // update url for prod
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const handleSubmit = async (e) => {
         localStorage.setItem('refresh_token', data.refresh);
 
         // Redirect the user to the summaries page upon successful sign-in
-        window.location.href = '/ui/summaries';
+        window.location.href = '/summaries';
     })
     .catch((error) => {
         console.error('Error:', error);

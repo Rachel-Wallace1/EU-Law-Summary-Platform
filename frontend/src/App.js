@@ -19,14 +19,14 @@ function App() {
         <AuthProvider>
           <NavBar />
           <Routes>
-            <Route path="/ui" element={<HomePage />} />
-            <Route path="/ui/signup" element={<SignUp />} />
-            <Route path="/ui/signin" element={<SignIn />} />
-            <Route path="/ui/summaries" element={<Summaries />} />
-            <Route path="/ui/summary/:celex/view" element={<ViewSummary />} />
-            <Route path="/ui/summary/:celex/edit" element={<EditSummary />} />
-            <Route path="/ui/summary/:celex/new" element={<NewSummary />} />
-            <Route path="/ui/generate_new_summary" element={<GenerateNewSummary />} />
+            <Route path="" element={<HomePage />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/summaries" element={<Summaries />} />
+            <Route path="/summary/:celex/view" element={<ViewSummary />} />
+            <Route path="/summary/:celex/edit" element={<EditSummary />} />
+            <Route path="/summary/:celex/new" element={<NewSummary />} />
+            <Route path="/generate_new_summary" element={<GenerateNewSummary />} />
             {/* Add other routes as needed */}
           </Routes>
         </AuthProvider>

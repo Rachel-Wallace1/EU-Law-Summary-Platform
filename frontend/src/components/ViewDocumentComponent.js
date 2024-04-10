@@ -86,7 +86,7 @@ function ViewDocumentComponent({celex}) {
         // TODO uncomment this once the backend api is working
         const fetchSummaryByCelex = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/edit/${celex}`);
+                const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/edit/${celex}`);
                 if (!response.ok) {
                     throw new Error(`Status: ${response.status}`);
                 }
@@ -102,16 +102,16 @@ function ViewDocumentComponent({celex}) {
     }, [])
 
     const handleEditClick = () => {
-        navigate(`/ui/summary/${document.celexNumber}/edit`, {state: {document}})
+        navigate(`/summary/${document.celexNumber}/edit`, {state: {document}})
     }
 
     const handleGenerateSummaryClick = () => {
-        navigate(`/ui/summary/${document.celexNumber}/new`, {state: {document}})
+        navigate(`/summary/${document.celexNumber}/new`, {state: {document}})
     }
 
 
     const handleGenerateNewSummaryClick = () => {
-        navigate(`/ui/generate_new_summary`)
+        navigate(`/generate_new_summary`)
     }
     return (
         <Container>

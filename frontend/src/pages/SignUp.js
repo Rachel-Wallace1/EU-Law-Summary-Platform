@@ -20,7 +20,7 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        fetch('http://localhost:8000/api/signup/', { // update to use your Django backend URL, or load as environment variable
+        fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/signup/`, { // update to use your Django backend URL, or load as environment variable
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ function SignUp() {
             console.log('Success:', data);
             // Redirect user or show success message
             // redirect to sign in page
-            window.location.href = '/ui/signin';
+            window.location.href = '/signin';
         })
         .catch((error) => {
             console.error('Error:', error);

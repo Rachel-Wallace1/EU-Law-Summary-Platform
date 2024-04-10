@@ -15,7 +15,7 @@ function EditDocumentComponent({document}) {
     };
 
     const handleCancelClick = () => {
-        navigate(`/ui/summary/${document.celex}/view`)
+        navigate(`/summary/${document.celex}/view`)
     };
 
     return (

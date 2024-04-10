@@ -30,7 +30,7 @@ const Table = ({data}) => {
                         owner={item.owner}
                         lastUpdated={item.current.timestamp}
                         status={item.status}
-                        viewItemClick={() => navigate(`/ui/summary/${item.celexNumber}/view`)}
+                        viewItemClick={() => navigate(`/summary/${item.celexNumber}/view`)}
                     />
                 ))}
             </div>

@@ -13,7 +13,7 @@ function SummariesComponent() {
 
             try {
                 while (hasMoreData) {
-                    const response = await fetch(`http://localhost:8000/fetchAll/${pageIndex}`);
+                    const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/fetchAll/${pageIndex}`);
 
                     if (!response.ok) {
                         throw new Error(`Status: ${response.status}`);

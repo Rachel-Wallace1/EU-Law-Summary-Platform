@@ -13,3 +13,5 @@ backend/db.sqlite3
 \?*
 ec2-ssh.pem
 .idea/
+backend/staticfiles/
+backend/db.sqlite3

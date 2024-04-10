@@ -20,7 +20,7 @@ function GenerateNewSummaryComponent({document}) {
         try {
             console.log('1. I was triggered during first block');
     
-            const summary = await fetch('http://localhost:8000/summaries/openai/', {
+            const summary = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/summaries/openai/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ function GenerateNewSummaryComponent({document}) {
     };
 
     const handleCancelClick = () => {
-        navigate(`/ui/summaries`)
+        navigate(`/summaries`)
     };
 
 
@@ -90,7 +90,7 @@ function GenerateNewSummaryComponent({document}) {
           console.log(celexNumber)
         
           // Fetch API to post data
-          fetch('http://localhost:8000/submit/', {
+          fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/submit/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

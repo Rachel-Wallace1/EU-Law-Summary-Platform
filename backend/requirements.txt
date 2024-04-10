@@ -7,3 +7,4 @@ loadenv
 setuptools
 pymongo
 openai
+gunicorn
