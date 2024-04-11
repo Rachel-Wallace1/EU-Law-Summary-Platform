@@ -28,9 +28,9 @@ name: Deploy to Amazon ECR
 
 on:
   push:
-    branches: [ "devops3" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "devops3" ]
+    branches: [ "main" ]
 
 env:
   AWS_REGION: us-west-2                    

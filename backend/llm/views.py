@@ -20,17 +20,17 @@ from .models import ChatGptBot
 class OpenAIChatAPIPostView(APIView):
 
     """
-    export OPENAI_API_KEY = "Enter Your Key Here"
-    curl -X POST http://localhost:8000/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
-    curl -X POST http://localhost:8000/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "Make a summary of https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32019L0633"}'
+    curl -X POST http://localhost:8000/api/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
+    curl -X POST http://localhost:8000/api/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "Make a summary of https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32019L0633"}'
     """
     def post(self, request, *args, **kwargs):
+        apiToken = request.data.get('apiToken', '')
         client = OpenAI(
             # This is the default and can be omitted
-            api_key=os.getenv("OPENAI_API_KEY"),
+            api_key=apiToken,
         )
-        
         user_input = request.data.get('input_message', '')
+        
         clean_user_input = str(user_input).strip()
         try:
             response = client.chat.completions.create(
@@ -71,8 +71,8 @@ class AzureOpenAIChatAPIPostView(APIView):
     OpenAI on Azure
     Using the curl command to post OpenAI prompt
     Example curl in terminal:
-    curl -X POST http://localhost:8000/summaries/azureopenai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
-    curl -X POST http://localhost:8000/summaries/azureopenai/ -H "Content-Type: application/json" -d '{"input_message": "Make a summary of https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32019L0633"}'
+    curl -X POST http://localhost:8000/api/summaries/azureopenai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
+    curl -X POST http://localhost:8000/api/summaries/azureopenai/ -H "Content-Type: application/json" -d '{"input_message": "Make a summary of https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32019L0633"}'
     """
     def post(self, request, *args, **kwargs):
         # Extract data from the request

@@ -11,7 +11,7 @@ function GenerateNewSummaryComponent({document}) {
     const [celexNumber, setCelexNumber] = useState('');
     const [title, setTitle] = useState('');
     const [saved, setSaved] = useState(false);
-
+    const [apiToken, setApiToken] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,6 +27,7 @@ function GenerateNewSummaryComponent({document}) {
                 },
                 body: JSON.stringify({
                     input_message: inputText,
+                    apiToken: apiToken,
                 })
             });
             
@@ -66,6 +67,7 @@ function GenerateNewSummaryComponent({document}) {
     const handleClearSummaryClick = () => {
         setInputText('');  
         setCelexNumber(''); // Clear the Celex Number
+        setApiToken('');  
         setTitle(''); 
         setsummary(''); 
         setSaved(false)
@@ -139,19 +141,30 @@ function GenerateNewSummaryComponent({document}) {
                 <Container>
                     <Card>
                         <Card.Body>
+                        <div>
+                            {/* Input for API token */}
+                            <Form.Control
+                                type="text"
+                                name="apiToken"
+                                value={apiToken}
+                                onChange={(e) => setApiToken(e.target.value)}
+                                placeholder="Enter your OpenAI API token..."
+                                className="mt-2"
+                            />
                             {/* Textarea for input text */}
                             <Form.Control
-                            as="textarea"
-                            name="prompt"
-                            rows={2}
-                            value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
-                            placeholder="Enter text here..."
+                                as="textarea"
+                                name="prompt"
+                                rows={5}
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                placeholder="Enter text here..."
                             />
                             {/* Submit button */}
                             <Button type="submit" onClick={handleSubmit} className="mt-2">
-                            Submit
+                                Submit
                             </Button>
+                        </div>
                         </Card.Body>
                     </Card>
                 </Container>

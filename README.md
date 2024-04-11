@@ -121,31 +121,20 @@ This architecture (except the AWS CodeBuild) represents a complete CI/CD pipelin
 
 
 
-### How to interact with AI on local environment (Temporary: Will remove/update later)
-1. Get a openAI key and export to environment variable
-Run this in the terminal
-```bash
-export OPENAI_API_KEY="sk-"
-```
-In the same terminal, start the python backend app
-2. Start the front end app in a second terminal
+### Generating a New Summary
+To generate a new summary, follow these steps:
 
-3. Go to the endpoint http://localhost:3000/generate_new_summary
+1. Run the Backend App Locally: Refer to the README file located in the /backend directory for instructions on setting up and running the backend application on your local machine.
 
-4. Example prompt to enter:
-```bash
-Write a summary for Regulation (EU) 2021/2115 of the European Parliament and of the Council of 2 December 2021 establishing rules on support for strategic plans to be drawn up by Member States under the common agricultural policy (CAP Strategic Plans) and financed by the European Agricultural Guarantee Fund (EAGF) and by the European Agricultural Fund for Rural Development (EAFRD) and repealing Regulations (EU) No 1305/2013 and (EU) No 1307/2013 
-In this format:
-1. Summary 
-2. WHAT IS THE AIM OF THE REGULATION?
-3. KEY POINTS
-4. FROM WHEN DOES THE REGULATION APPLY?
-5. MAIN DOCUMENT
-6. RELATED DOCUMENTS
-```
-5. After few seconds, output will show:
-6. Enter celexId
-7. Enter title
-8. Click button "save to database"
+2. Run the Frontend App Locally: Refer to the README file located in the /frontend directory for instructions on setting up and running the frontend application on your local machine.
 
-![github](new_summary2.png)
+3. Access the "Generate New Summary" Page: Once both the backend and frontend apps are running locally, navigate to the "Generate New Summary" page. On this page, you'll need to do the following:
+
+- Prepare Your OpenAI API Token: Ensure you have your OpenAI API token ready. If you don't have one, you can obtain it from the OpenAI website.
+
+- Fill in the Law Information: Provide the necessary information related to the law that you want to summarize. This may include relevant text, documents, or input data.
+
+- Generate the Form: After providing the required information, click on the appropriate button to generate the form. This form will utilize your input along with the OpenAI API to generate a summary based on the provided law information.
+
+By following these steps, you'll be able to generate a new summary using the provided backend and frontend applications.
+

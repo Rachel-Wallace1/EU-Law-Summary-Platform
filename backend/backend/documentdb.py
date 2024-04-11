@@ -108,20 +108,7 @@ class DocumentdDB:
             return "Deletion unsuccessful"
 
         return "Deletion successful"
-    
-    def dumpAll(self, page):
-        #Specify the collection to be used
-        col = self.db.summaries
 
-        #For pagination we may want to skip some pages of results
-        numberToSkip = 10 * page
-
-        #Find the json object with the same celexNumber
-        #(technically just finds the first law with the Id)
-        summaries = col.find()
-
-        #Dump is used to convert it from the pymongo cursor to a json dict
-        return dumps(summaries)
     
     def submitAnnotation(self, celexNumber, annotation):
         #Specify the collection to be used.

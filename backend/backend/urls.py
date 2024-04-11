@@ -47,12 +47,10 @@ urlpatterns = [
     path('api/fetchAll', views.Database.fetchAll, {'page':None}, name='fetchAll'),
     path('api/fetchAll/<int:page>', views.Database.fetchAll, name='fetchAll'),
     path('api/delete', views.Database.delete, name="delete"),
-    path('api/dumpAll/', views.Database.dumpAll, {'page':None}, name='dumpAll'),
     path('api/submitAnnotation/', views.Database.submitAnnotation, name="submitAnnotation"),
     path('api/updateAnnotation/', views.Database.updateAnnotation, name="updateAnnotation"),
     path('api/fetchAnnotations/', views.Database.fetchAnnotations, name="fetchAnnotations"),
     path('api/deleteAnnotation/', views.Database.deleteAnnotation, name="deleteAnnotation"),
     path('api/deleteAllAnnotations/', views.Database.deleteAllAnnotations, name="deleteAllAnnotations"),
     path('api/health/', views.Health.health, name='health'),
-
 ]
