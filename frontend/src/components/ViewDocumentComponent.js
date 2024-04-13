@@ -109,6 +109,10 @@ function ViewDocumentComponent({celex}) {
         navigate(`/summary/${document.celexNumber}/new`, {state: {document}})
     }
 
+    const handleTimelineClick = () => {
+        navigate(`/summary/${celex}/timeline`, {})
+    }
+
 
     const handleGenerateNewSummaryClick = () => {
         navigate(`/generate_new_summary`)
@@ -120,7 +124,7 @@ function ViewDocumentComponent({celex}) {
             {<Container>
                 <Row className="justify-content-between" style={{marginBottom: '5px'}}>
                     <Col xs="auto">
-                        <Button variant="primary">Timeline</Button>
+                        <Button variant="primary" onClick={handleTimelineClick}>Timeline</Button>
                     </Col>
                     <Col xs="auto">
                         <div className="d-flex gap-2">

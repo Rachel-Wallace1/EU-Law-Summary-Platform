@@ -11,6 +11,8 @@ import NewSummary from './pages/NewSummary';
 import GenerateNewSummary from './pages/GenerateNewSummary';
 import Summaries from "./pages/Summaries";
 import { AuthProvider } from './components/AuthContext';
+import SummaryTimeline from "./pages/SummaryTimeline";
+import SummaryDiff from "./pages/SummaryDiff";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
             <Route path="/summary/:celex/view" element={<ViewSummary />} />
             <Route path="/summary/:celex/edit" element={<EditSummary />} />
             <Route path="/summary/:celex/new" element={<NewSummary />} />
+            <Route path="/summary/:celex/timeline" element={<SummaryTimeline />} />
+            <Route path="/summary/:celex/diff" element={<SummaryDiff />} />
             <Route path="/generate_new_summary" element={<GenerateNewSummary />} />
             {/* Add other routes as needed */}
           </Routes>
