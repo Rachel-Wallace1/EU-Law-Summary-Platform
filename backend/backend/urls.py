@@ -52,5 +52,7 @@ urlpatterns = [
     path('api/fetchAnnotations/', views.Database.fetchAnnotations, name="fetchAnnotations"),
     path('api/deleteAnnotation/', views.Database.deleteAnnotation, name="deleteAnnotation"),
     path('api/deleteAllAnnotations/', views.Database.deleteAllAnnotations, name="deleteAllAnnotations"),
+    path('api/summary/<str:celexNumber>/versions', views.Database.getVersionMetadata, name="getVersionMetadata"),
+    path('api/summary/<str:celexNumber>/version/<int:version>', views.Database.getVersion, name="getVersion"),
     path('api/health/', views.Health.health, name='health'),
 ]

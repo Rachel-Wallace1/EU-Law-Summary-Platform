@@ -70,6 +70,20 @@ class Database:
 
         return JsonResponse({"Submission status" : x})
     
+    @require_http_methods(["GET"])
+    def getVersionMetadata(request, celexNumber):
+        
+        x = Database.docdb.getVersionMetadata(celexNumber)
+
+        return JsonResponse(x, safe=False)
+    
+    @require_http_methods(["GET"])
+    def getVersion(request, celexNumber, version):
+        
+        x = Database.docdb.getVersion(celexNumber, version)
+
+        return JsonResponse(x, safe=False)
+
     @require_http_methods(["POST"])
     def submitAnnotation(request):
         json_data = json.loads(request.body)

@@ -46,7 +46,7 @@ class DocumentdDB:
         doc = col.find_one({"celexNumber" : celexNumber})
 
         #Increment the version number
-        newVersion = str(int(doc["current"]["v"]) + 1)
+        newVersion = int(doc["current"]["v"]) + 1
 
         #Move the previous current summary to the prev list
         doc["prev"].append(doc["current"])
@@ -109,6 +109,51 @@ class DocumentdDB:
 
         return "Deletion successful"
 
+
+    def getVersionMetadata(self, celexNumber):
+        #Specify the collection to be used
+        col = self.db.summaries
+
+        #Find the json object with the same celexNumber
+        #(technically just finds the first law with the Id)
+        summaries = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "current.v" : 1, "current.author" : 1, "current.timestamp" :  1, "prev.v" : 1, "prev.author" : 1, "prev.timestamp" : 1})
+        
+        # Create a new dict to return
+        versionMetada = {"celexNumber" : celexNumber}
+        versionMetada["versions"] = list()
+
+        #Add the current version info as the first entry
+        versionMetada["versions"].append(summaries["current"])
+
+        #Sort in desencding order by version number for previous versions
+        versionMetada["versions"].extend(sorted(summaries["prev"], key=lambda d: d['v'], reverse=True))
+
+        #Provide the count of versions
+        versionMetada["count"] = len(versionMetada["versions"])
+
+        return versionMetada
+
+    def getVersion(self, celexNumber, version):
+        #Specify the collection to be used
+        col = self.db.summaries
+
+        print(celexNumber)
+        #Find the json object with the same celexNumber and version
+        #(technically just finds the first law with the Id)
+        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "current" : 1, "prev.v" : 1, "prev.author" : 1, "prev.timestamp" : 1, "prev.summary" : 1})
+        
+        # Create a new dict to return
+        versionSummary = {"celexNumber" : celexNumber }
+
+         # Merge it with the dict containing the version summary info
+        if version == summary["current"]["v"]:
+            versionSummary.update(summary["current"])
+        else:
+            versionSummary.update(
+                next((item for item in summary["prev"] if item['v'] == version), None)
+            )
+
+        return versionSummary
     
     def submitAnnotation(self, celexNumber, annotation):
         #Specify the collection to be used.
