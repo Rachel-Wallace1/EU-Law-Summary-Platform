@@ -4,16 +4,14 @@
 
 import urllib
 from pathlib import Path as p
-
 from langchain.prompts import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import ChatOpenAI
 import pandas as pd
+from dotenv import load_dotenv
 
-import os
-
-os.environ["OPENAI_API_KEY"] = "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"
+load_dotenv()
 
 llm = ChatOpenAI(model_name = 'gpt-3.5-turbo-16k')
 
@@ -52,8 +50,8 @@ print(total)
 print('===================')
 
 # print(pages[0].page_content)
-
-print('########### Single Shot Summarization ##########')
+print()
+print('########### Approach 1: Single Shot Summarization ##########')
 
 content = pages[:3]
 
@@ -63,7 +61,7 @@ print('Summary of ')
 print(results['output_text'])
 
 
-print('########### Map Reduce Summarization ##########')
+print('########### Approach 2: Map Reduce Summarization ##########')
 map_prompt_template = """
                       Write a summary of this chunk of text that includes the main points and any important details.
                       {text}
@@ -118,3 +116,7 @@ print("\n\n [Page number]")
 print(pdf_mp_summary["page_number"].iloc[index])
 print("\n\n [Source: file_name]")
 print(pdf_mp_summary["file_name"].iloc[index])
+
+print()
+print('Final Summary of Map/Reduce:')
+print(map_reduce_outputs['output_text'])
