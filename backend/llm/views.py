@@ -15,49 +15,139 @@ from rest_framework.decorators import api_view
 from .models import OpenAIChatResponse
 from .serializers import OpenAIChatResponseSerializer
 from .models import ChatGptBot
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse,parse_qs
+import nltk 
+from llmlingua import PromptCompressor
 
+def check_url_content(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            return soup
+
+        else:
+            print("Failed to fetch content from the URL. Status code:", response.status_code)
+    except requests.exceptions.RequestException as e:
+        print("Error occurred while fetching content:", e)
+
+def get_celex(url):
+    parsed_url = urlparse(url)
+    query_params = parse_qs(parsed_url.query)
+    celex_number = query_params.get('uri')
+    
+    if celex_number:
+        celex_number_str = celex_number[0]
+        celex_number2 = celex_number_str.replace("CELEX:", "")
+
+        return celex_number2
+    else:
+        return None
+
+
+def get_text_content(content):
+    text_content = content.get_text()
+    return text_content
+
+def llmlingua_style_compress(prompt):
+    llm_lingua = PromptCompressor()
+    compressed_prompt = llm_lingua.compress_prompt(prompt, instruction="", question="", target_token=500)
+    print("compressed_prompt" + compressed_prompt)
+    return compressed_prompt['compressed_prompt']
 
 class OpenAIChatAPIPostView(APIView):
 
-    """
-    curl -X POST http://localhost:8000/api/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "hello"}'
-    curl -X POST http://localhost:8000/api/summaries/openai/ -H "Content-Type: application/json" -d '{"input_message": "Make a summary of https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32019L0633"}'
-    """
     def post(self, request, *args, **kwargs):
+
         apiToken = request.data.get('apiToken', '')
+
         client = OpenAI(
             # This is the default and can be omitted
             api_key=apiToken,
         )
+
         user_input = request.data.get('input_message', '')
+
+        url = str(user_input).strip()
+
+        content = check_url_content(url)
+
+        text_content = get_text_content(content)
+
+        celex = get_celex(url)
+
+        prompt_struc = """
+        Here is the template for the summary structure should follow, make a very long summary:
+
+        SUMMARY OF:
+        - [titles of the original resource(s) in bullet form and hyperlinked]
+
+        WHAT IS THE AIM OF ......?
+        <content here>
+
+        KEY POINTS
+        <content here>
+
+        FROM WHEN DOES THE DECISION APPLY?
+        <content here>
+
+        BACKGROUND
+        <content here>
+
+        KEY TERMS
+        - **<bullet list of terms, bolding the term>**
+
+        MAIN DOCUMENT
+        - [the title(s) of the main document(s), in bullet form and hyperlinked]
+
+        RELATED DOCUMENTS
+        <titles of related documents if any>
+        """
+        final_prompt = "given article : " + text_content + " with prompt  " + prompt_struc
+        #compressed_prompt = llmlingua_style_compress(final_prompt)
         
-        clean_user_input = str(user_input).strip()
         try:
             response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                        {
-                            "role": "user",
-                            "content": clean_user_input,
-                        }
-                    ],
-                )
-            
-            bot_response = response.choices[0].message.content
-            print("clean_user_input is " +clean_user_input)
-            print("Bot response is " +bot_response)
-            # Check if the request was successful
-            if response.object == 'chat.completion':
-                return Response(bot_response, status=status.HTTP_201_CREATED)
-            else:
+                model="gpt-3.5-turbo",   
+                messages=[
+                    {
+                        "role": "user",
+                        "content": final_prompt
+                    }
+                ],
+                max_tokens=2000,   
+                temperature=0.7,   
+                stop=None,   
+            )
+            title = client.chat.completions.create(
+                model="gpt-3.5-turbo",   
+                messages=[
+                    {
+                        "role": "user",
+                        "content": "write a title for this content: "+ url,
+                    }
+                ],
+                max_tokens=20,   
+            )
 
-                return render(request, "success.html", {"updatedSummary" : bot_response})
-        
+            bot_response = response.choices[0].message.content
+            title = title.choices[0].message.content
+            if response.object == 'chat.completion':
+                return Response({"bot_response": bot_response, "celex": celex, "title": title}, status=status.HTTP_201_CREATED)
+            else:
+                return render(request,  "success.html", {"updatedSummary" : bot_response})
+            
+        except openai.APIError as e:
+            print("OpenAI API Error:", e)
+        except Exception as e:
+            print("Error:", e)
         except openai.APIConnectionError as e:
-            #Handle connection error here
             messages.warning(request, f"Failed to connect to OpenAI API, check your internet connection")
         except openai.RateLimitError as e:
-            #Handle rate limit error (we recommend using exponential backoff)
             messages.warning(request, f"You exceeded your current quota, please check your plan and billing details.")
             messages.warning(request, f"If you are a developper change the API Key")
         

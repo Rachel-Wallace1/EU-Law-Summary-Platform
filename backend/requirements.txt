@@ -8,3 +8,7 @@ setuptools
 pymongo
 openai
 gunicorn
+requests
+bs4
+nltk
+llmlingua

@@ -4,7 +4,6 @@ import {useNavigate} from 'react-router-dom';
 
 function GenerateNewSummaryComponent({document}) {
     const navigate = useNavigate();
-    const [documentText, setDocumentText] = useState('');
     const [inputText, setInputText] = useState('');
     const [summary, setsummary] = useState('');
     const [index, setIndex] = useState(0);
@@ -12,10 +11,31 @@ function GenerateNewSummaryComponent({document}) {
     const [title, setTitle] = useState('');
     const [saved, setSaved] = useState(false);
     const [apiToken, setApiToken] = useState('');
+    const [loading, setLoading] = useState(false);
 
+    const Waiting = () => {
+        const [rotationAngle, setRotationAngle] = useState(0);
+    
+        useEffect(() => {
+            const interval = setInterval(() => {
+                setRotationAngle(angle => angle + 1); // Increment rotation angle
+            }, 100); // Set the interval to update the rotation angle
+    
+            return () => clearInterval(interval); // Clear the interval on component unmount
+        }, []);
+    
+        return (
+            <div className="loading-container">
+                {/* You can use any loading animation or image here */}
+                <div className="loading-spinner" style={{ transform: `rotate(${rotationAngle}deg)` }}></div>
+                <p>Loading...</p>
+            </div>
+        );
+    };
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+        setLoading(true);
         // Send request to OpenAI API
         try {
             console.log('1. I was triggered during first block');
@@ -32,11 +52,18 @@ function GenerateNewSummaryComponent({document}) {
             });
             
             const summaryData = await summary.json();
-            setsummary(summaryData);
-            setIndex(0); // Reset index for incremental display
+            setSaved(false)
+            setsummary(summaryData.bot_response);
+            setCelexNumber(summaryData.celex);
+            setTitle(summaryData.title)
+            
+            setIndex(0); 
         } catch (error) {
             console.error('Error:', error);
             // Handle error
+        } finally {
+            // Set loading state to false when API request completes (whether it succeeded or failed)
+            setLoading(false);
         }
     };
     
@@ -57,17 +84,10 @@ function GenerateNewSummaryComponent({document}) {
         }, 20);  
     };
     
-    useEffect(() => {
-        setDocumentText('The link provided points to the legal text..')
-    }, [])
-    const handleTextChange = (event) => {
-        setDocumentText(event.target.value);
-    };
+
 
     const handleClearSummaryClick = () => {
-        setInputText('');  
-        setCelexNumber(''); // Clear the Celex Number
-        setApiToken('');  
+        setCelexNumber(''); 
         setTitle(''); 
         setsummary(''); 
         setSaved(false)
@@ -87,9 +107,6 @@ function GenerateNewSummaryComponent({document}) {
             title: title,
             summary: summary
           };
-          console.log('I was triggered')
-          console.log(data)
-          console.log(celexNumber)
         
           // Fetch API to post data
           fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/submit/`, {
@@ -125,45 +142,39 @@ function GenerateNewSummaryComponent({document}) {
       
     return (<div>
             <Container>
-                <Container>
-                    <Row className="justify-content-between" style={{marginBottom: '5px'}}>
-                        <Col xs="auto">
-                            <Button type="clear" variant="danger" onClick={handleClearSummaryClick}>Clear Summary</Button>
-                        </Col>
-                        <Col xs="auto">
-                            <div className="d-flex gap-2">
-                                <Button type="clear" variant="danger" onClick={handleCancelClick}>Cancel</Button>
-                            
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
+
                 <Container>
                     <Card>
                         <Card.Body>
-                        <div>
+                        <div class="input-group">
                             {/* Input for API token */}
                             <Form.Control
-                                type="text"
+                                type="password"
                                 name="apiToken"
                                 value={apiToken}
                                 onChange={(e) => setApiToken(e.target.value)}
                                 placeholder="Enter your OpenAI API token..."
-                                className="mt-2"
                             />
-                            {/* Textarea for input text */}
+                            
+                            {/* Text input for EU HTML link */}
                             <Form.Control
-                                as="textarea"
+                                type="text"
                                 name="prompt"
-                                rows={5}
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
-                                placeholder="Enter text here..."
+                                placeholder="EU HTML link..."
                             />
-                            {/* Submit button */}
-                            <Button type="submit" onClick={handleSubmit} className="mt-2">
+                            <div>
+                            {/* Conditionally render the Waiting component while loading is true */}
+
+                            {/* Your form and button */}
+                            <Col xs="auto">
+                                <Button type="submit" onClick={handleSubmit} >
                                 Submit
-                            </Button>
+                                </Button>
+                            </Col>
+                            </div>
+                            
                         </div>
                         </Card.Body>
                     </Card>
@@ -171,40 +182,41 @@ function GenerateNewSummaryComponent({document}) {
                 <Container>
                     <Card>
                         <Card.Body>
-                            <form onSubmit={handleSave} style={{ width: '100%' }}>
+                            <form onSubmit={handleSave} >
                                 {/* Celex Number input */}
-                                <Form.Group controlId="celexNumber" style={{ width: '100%' }}>
-                                    <Form.Label>Celex Number</Form.Label>
+                                <div class="input-group">
+                                <Form.Group controlId="celexNumber" >
                                     <Form.Control
                                     type="text"
-                                    placeholder="Enter Celex Number"
+                                    placeholder="Celex Number"
                                     value={celexNumber}
                                     onChange={(e) => setCelexNumber(e.target.value)}
-                                    style={{ width: '100%' }}
                                     />
                                 </Form.Group>
                                 {/* Title input */}
-                                <Form.Group controlId="title" >
-                                    <Form.Label>Title</Form.Label>
+                                <Form.Group controlId="title" className="w-50" >
                                     <Form.Control
                                     type="text"
-                                    placeholder="Enter Title"
+                                    placeholder="Title"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)
                                     }
-                                    style={{ width: '100%' }}
                                     />
                                 </Form.Group>
+                                <Col xs="auto">
+                                <Button type="clear" variant="danger" onClick={handleClearSummaryClick}>Clear Summary</Button>
+                                </Col>
+                                </div>
+
                                 {/* Summary textarea */}
                                 <Form.Group controlId="summary">
-                                    <Form.Label>Summary</Form.Label>
+                                    {loading && <Waiting />}
                                     <Form.Control
                                     as="textarea"
-                                    rows={5}
+                                    rows={50}
                                     value={summary.slice(0, index)}
                                     onChange={(e) => setsummary(e.target.value)}
                                     disabled={saved}
-                                    style={{ width: '100%' }}
                                     />
                                 </Form.Group>
                             {/* Save button */}

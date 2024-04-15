@@ -154,6 +154,7 @@ class DocumentdDB:
             )
 
         return versionSummary
+
     
     def submitAnnotation(self, celexNumber, annotation):
         #Specify the collection to be used.

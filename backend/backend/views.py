@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
 from django.views.decorators.http import require_http_methods
 import json
-
+from django.views.decorators.csrf import csrf_exempt
 from .documentdb import DocumentdDB
 
 class Database:
@@ -34,6 +34,7 @@ class Database:
         return JsonResponse(json.loads(x), safe=False)
     
     @require_http_methods(["POST"])
+    @csrf_exempt
     def submit(request):
         json_data = json.loads(request.body)
 
