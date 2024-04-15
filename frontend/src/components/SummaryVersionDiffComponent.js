@@ -107,7 +107,7 @@ function SummaryVersionDiffComponent({celex, currentVersion, previousVersion}) {
                             <Card.Body>
                                 <Card.Text>
                                     <DiffComponent newText={current.summary}
-                                                   oldText={previous.summary}/>
+                                                   oldText={previous && previous.summary ? previous.summary : ''}/>
                                 </Card.Text>
                             </Card.Body>
                         </Card>}
