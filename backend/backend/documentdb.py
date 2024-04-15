@@ -32,6 +32,7 @@ class DocumentdDB:
                 "current" : {
                     "v" : 1,
                     "author" : "LegalBot",
+                    "notes" : "",
                     "timestamp" : datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                     "summary" : summary
                 },
@@ -57,6 +58,7 @@ class DocumentdDB:
         doc["current"] = {
             "v"  : newVersion,
             "author" : author,
+            "notes" : "",
             "timestamp" : datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
             "summary" : updatedSummary
         }
@@ -77,7 +79,7 @@ class DocumentdDB:
 
         #Find the json object with the same celexNumber
         #(technically just finds the first law with the Id)
-        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "current" : 1})
+        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "notes" : 1, "current" : 1})
 
         if summary is None:
             return None
@@ -137,15 +139,14 @@ class DocumentdDB:
         #Specify the collection to be used
         col = self.db.summaries
 
-        print(celexNumber)
         #Find the json object with the same celexNumber and version
         #(technically just finds the first law with the Id)
-        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "current" : 1, "prev.v" : 1, "prev.author" : 1, "prev.timestamp" : 1, "prev.summary" : 1})
+        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "current" : 1, "prev.v" : 1, "prev.author" : 1, "prev.notes" : 1, "prev.timestamp" : 1, "prev.summary" : 1})
         
-        # Create a new dict to return
+        #Create a new dict to return
         versionSummary = {"celexNumber" : celexNumber }
 
-         # Merge it with the dict containing the version summary info
+        #Merge it with the dict containing the version summary info
         if version == summary["current"]["v"]:
             versionSummary.update(summary["current"])
         else:
@@ -156,6 +157,33 @@ class DocumentdDB:
         return versionSummary
 
     
+    def editNote(self, celexNumber, note, version):
+        #Specify the collection to be used
+        col = self.db.summaries
+
+        #Find the json object with the same celexNumber and version
+        #(technically just finds the first law with the Id)
+        summary = col.find_one({"celexNumber" : celexNumber})
+        
+        print(version)
+        #Set the notes field for the specified version
+        if version == summary["current"]["v"]:
+            summary["current"]["notes"] = note
+        else:
+            summary["prev"][version - 1]["notes"] = note
+
+        #Insert the updated document
+        result = col.replace_one({"celexNumber" : celexNumber}, summary)
+        
+        if result.modified_count != 1:
+            print("Update unsuccesful")
+
+        #Return the new document
+        return self.getSummary(celexNumber)
+
+        
+    #Annotations endpoints
+
     def submitAnnotation(self, celexNumber, annotation):
         #Specify the collection to be used.
         #Want to use a different collection than the

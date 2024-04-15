@@ -54,5 +54,6 @@ urlpatterns = [
     path('api/deleteAllAnnotations/', views.Database.deleteAllAnnotations, name="deleteAllAnnotations"),
     path('api/summary/<str:celexNumber>/versions', views.Database.getVersionMetadata, name="getVersionMetadata"),
     path('api/summary/<str:celexNumber>/version/<int:version>', views.Database.getVersion, name="getVersion"),
+    path('api/editNote', views.Database.editNote, name="editNote"),
     path('api/health/', views.Health.health, name='health'),
 ]

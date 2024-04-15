@@ -86,6 +86,22 @@ class Database:
         return JsonResponse(x, safe=False)
 
     @require_http_methods(["POST"])
+    def editNote(request):
+        json_data = json.loads(request.body)
+
+        try:
+            celexNumber = json_data["celexNumber"]
+            note = json_data["note"]
+            version = json_data["version"]
+        except KeyError:
+            HttpResponseServerError("Malformed data in request")
+
+        x = Database.docdb.editNote(celexNumber, note, version)
+
+        return JsonResponse(json.loads(x), safe=False)
+
+    #Annotations
+    @require_http_methods(["POST"])
     def submitAnnotation(request):
         json_data = json.loads(request.body)
 
