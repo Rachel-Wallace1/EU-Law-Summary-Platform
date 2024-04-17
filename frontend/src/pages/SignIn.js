@@ -49,26 +49,39 @@ const handleSubmit = async (e) => {
 
 return (
     <>
-    <PageHeaderComponent title="Sign In" />
-    <form onSubmit={handleSubmit}>
-    <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-    />
-    <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-    />
-    <button type="submit">Sign In</button>
-    </form>
+    <div className="signin-container">
+        <div id="signin-text">
+                    <div id="left">
+                        <p>Welcome to EU LAW</p>
+                    </div>
+                    <div id="right">
+                        <p>No account?</p>
+                        <a href="/signup">Sign Up</a>
+                    </div>
+                </div>
+                <div id="heading">
+                    <h1>Sign In</h1>
+                </div>
+        <form onSubmit={handleSubmit}>
+        <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+        />
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+        />
+        <button type="submit">Sign In</button>
+        </form>
+    </div>
     </>
 );
 }

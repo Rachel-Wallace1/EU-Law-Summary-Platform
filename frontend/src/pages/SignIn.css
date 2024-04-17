@@ -1,38 +1,105 @@
+
+
+
 /* Sign Up Form Container */
-form {
+.signin-container {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    align-items: center;
+    max-width: 539px;
     margin: auto;
+    margin-top: 15vh;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font: poppins;
+}
+
+
+/* Styling for the text description of the form */
+#signin-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 451px;
+    padding: 0;
+}
+
+#signin-text p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+#right {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+
+#heading {
+    font-size: 3rem;
+    color: #333;
+    font-weight: medium;
+    text-align: left;
+    width: 451px;
+    margin-bottom: 40px;
+}
+
+.signin-container div h1 {
+    font-size: 3rem;
+    color: #333;
+    font-weight: medium;
+    margin: 0;
+    text-align: left;
+}
+
+
+/* Styling for the form */
+.signin-container form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: none;
+    width: 451px;
+}
+
+
+/* Styling for the text description of the form */
+.signin-container form p {
+    font-size: 1.25rem;
+    color: #333;
+    margin: 0;
 }
 
 /* Styling for each input field */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.signin-container input[type="email"],
+.signin-container input[type="password"] {
     font-size: 16px;
-    padding: 10px;
     margin-bottom: 20px; /* Spacing between each field */
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 4px; /* Rounded corners */
+    padding: 10px;
 }
 
 /* Styling the submit button */
-button[type="submit"] {
+.signin-container button[type="submit"] {
     font-size: 16px;
-    font-weight: bold;
+    font: poppins;
     color: white;
-    background-color: #007bff;
+    background-color: #0089ED;
     padding: 10px;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
+    margin: 30px 0px 30px 0px;
     transition: background-color 0.3s ease-in-out;
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3; /* Darker shade of blue on hover */
+.signin-container button[type="submit"]:hover {
+    background-color: #035997; /* Darker shade of blue on hover */
 }
