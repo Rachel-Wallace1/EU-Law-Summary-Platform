@@ -2,6 +2,8 @@ import React, {useEffect} from 'react';
 import {Card, Container, Row, Col, Button, Modal, Form} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import DOMPurify from 'dompurify';
+import ReviewerSelectionModal from './ReviewerSelectionModal';
+import PublishConfirmationModal from './PublishConfirmationModal';
 
 function GenerateSummaryModal({ show, onHide, celex, generateSummaryClick }) {
     return (
@@ -76,6 +78,8 @@ function ViewDocumentComponent({celex}) {
     const navigate = useNavigate();
     const [modalShow, setModalShow] = React.useState(false);
     const [document, setDocument] = React.useState({});
+    const [showReviewerModal, setShowReviewerModal] = React.useState(false);
+    const [showPublishConfirmModal, setShowPublishConfirmModal] = React.useState(false);
     const formattedSummary = document && document.current && document.current.summary
         ? sanitizeAndFormatString(document.current.summary)
         : 'No existing summary found';
@@ -113,10 +117,20 @@ function ViewDocumentComponent({celex}) {
         navigate(`/summary/${celex}/timeline`, {})
     }
 
-
     const handleGenerateNewSummaryClick = () => {
         navigate(`/generate_new_summary`)
     }
+
+
+    const handleReviewClick = () => {
+        setShowReviewerModal(true);
+    };
+    
+
+    const handlePublishClick = () => {
+        setShowPublishConfirmModal(true);
+    }
+
     return (
         <Container>
             {/*TODO re-add once document contains status*/}
@@ -141,8 +155,16 @@ function ViewDocumentComponent({celex}) {
                                 generateSummaryClick={handleGenerateSummaryClick}
                             />
                             <Button variant="warning" onClick={handleEditClick}>Edit</Button>
-                            <Button variant="success">Send</Button>
-                        </div>
+                            <Button variant="success" onClick={handleReviewClick}>Send For Review</Button>
+                            <ReviewerSelectionModal
+                                show={showReviewerModal}
+                                onHide={() => setShowReviewerModal(false)}
+                            />
+                            <Button onClick={handlePublishClick}>Publish</Button>
+                            <PublishConfirmationModal
+                                show={showPublishConfirmModal}
+                                onHide={() => setShowPublishConfirmModal(false)}
+                            />                        </div>
                     </Col>
                 </Row>
             </Container>}
