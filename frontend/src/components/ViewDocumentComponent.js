@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {Card, Container, Row, Col, Button, Modal, Form} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
-import DOMPurify from 'dompurify';
-import ReviewerSelectionModal from './ReviewerSelectionModal';
+import {useAuth} from './AuthContext';
 import PublishConfirmationModal from './PublishConfirmationModal';
+import {UserRole} from "./enums";
+import ReviewerSelectionModal from './ReviewerSelectionModal';
 
-function GenerateSummaryModal({ show, onHide, celex, generateSummaryClick }) {
+function GenerateSummaryModal({show, onHide, celex, generateSummaryClick}) {
     return (
         <Modal
             show={show}
@@ -51,7 +52,8 @@ function GenerateSummaryModal({ show, onHide, celex, generateSummaryClick }) {
         </Modal>
     );
 }
-function DeleteSummaryModal({ show, onHide, celex, deleteSummaryClick }) {
+
+function DeleteSummaryModal({show, onHide, celex, deleteSummaryClick}) {
     return (
         <Modal
             show={show}
@@ -66,20 +68,21 @@ function DeleteSummaryModal({ show, onHide, celex, deleteSummaryClick }) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form.Label htmlFor="celexId">Do you really want to delete this summary? This process cannot be undone.</Form.Label>
+                <Form.Label htmlFor="celexId">Do you really want to delete this summary? This process cannot be
+                    undone.</Form.Label>
                 <Modal.Footer>
-                <Button variant="danger" onClick={deleteSummaryClick}>Yes, delete it</Button>
+                    <Button variant="danger" onClick={deleteSummaryClick}>Yes, delete it</Button>
                 </Modal.Footer>
             </Modal.Body>
 
         </Modal>
-        
+
 
     );
 }
 
 function sanitizeAndFormatString(str) {
-    const escapedStr = str.replace(/[&<>"']/g, function(match) {
+    const escapedStr = str.replace(/[&<>"']/g, function (match) {
         switch (match) {
             case '&':
                 return '&amp;';
@@ -99,9 +102,9 @@ function sanitizeAndFormatString(str) {
     return formattedStr;
 }
 
-
 function ViewDocumentComponent({celex}) {
     const navigate = useNavigate();
+    const {user, setUser} = useAuth();
     const [modalShow, setModalShow] = React.useState(false);
     const [modalShowDelete, setModalShowDelete] = React.useState(false);
     const [document, setDocument] = React.useState({});
@@ -111,10 +114,19 @@ function ViewDocumentComponent({celex}) {
         ? sanitizeAndFormatString(document.current.summary)
         : 'No existing summary found';
 
+    // TODO remove once we fetch user details from backend and is injected into user context
+    useEffect(() => {
+        setUser({
+            username: "rachel_wallace",
+            firstName: "Rachel",
+            lastName: "Wallace",
+            email: "r.wallacer12@gmail.com",
+            role: UserRole.EDITOR,
+        })
+    }, [])
 
     // Onload call the backend to fetch the summary
     useEffect(() => {
-        // TODO uncomment this once the backend api is working
         const fetchSummaryByCelex = async () => {
             try {
                 const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/edit/${celex}`);
@@ -135,8 +147,8 @@ function ViewDocumentComponent({celex}) {
     const handleEditClick = () => {
         navigate(`/summary/${document.celexNumber}/edit`, {state: {document}})
     }
-    const handleDeleteClick = async(e) => {
-        
+    const handleDeleteClick = async (e) => {
+
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/delete`, {
                 method: 'POST',
@@ -147,11 +159,11 @@ function ViewDocumentComponent({celex}) {
                     celexNumber: `${document.celexNumber}`,
                 })
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to delete summary');
             }
-    
+
             // Navigate to the "/Summaries" page
             navigate(`/Summaries`);
         } catch (error) {
@@ -170,7 +182,7 @@ function ViewDocumentComponent({celex}) {
     const handleReviewClick = () => {
         setShowReviewerModal(true);
     };
-    
+
 
     const handlePublishClick = () => {
         setShowPublishConfirmModal(true);
@@ -187,33 +199,36 @@ function ViewDocumentComponent({celex}) {
                     </Col>
                     <Col xs="auto">
                         <div className="d-flex gap-2">
-                            <Button variant="primary" onClick={() => setModalShow(true)}>
-                                New Summary
-                            </Button>
-                            <GenerateSummaryModal
-                                celex={celex}
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                                generateSummaryClick={handleGenerateSummaryClick}
-                            />
-                            <Button variant="warning" onClick={handleEditClick}>Edit</Button>
-                            <Button variant="danger" onClick={() => setModalShowDelete(true)}>Delete</Button>
-                            <DeleteSummaryModal
-                                celex={celex}
-                                show={modalShowDelete}
-                                onHide={() => setModalShowDelete(false)}
-                                deleteSummaryClick={handleDeleteClick}
-                            />
-                            <Button variant="success" onClick={handleReviewClick}>Send For Review</Button>
-                            <ReviewerSelectionModal
-                                show={showReviewerModal}
-                                onHide={() => setShowReviewerModal(false)}
-                            />
-                            <Button onClick={handlePublishClick}>Publish</Button>
-                            <PublishConfirmationModal
-                                show={showPublishConfirmModal}
-                                onHide={() => setShowPublishConfirmModal(false)}
-                            />                        </div>
+                            {user.role === 'Editor' &&
+                                <>
+                                    <Button variant="primary" onClick={() => setModalShow(true)}>
+                                        New Summary
+                                    </Button>
+                                    <Button variant="warning" onClick={handleEditClick}>Edit</Button>
+                                    <Button variant="danger" onClick={() => setModalShowDelete(true)}>Delete</Button>
+                                    <DeleteSummaryModal
+                                        celex={celex}
+                                        show={modalShowDelete}
+                                        onHide={() => setModalShowDelete(false)}
+                                        deleteSummaryClick={handleDeleteClick}
+                                    />
+                                    <Button variant="success" onClick={handleReviewClick}>Send For Review</Button>
+                                    <ReviewerSelectionModal
+                                        show={showReviewerModal}
+                                        onHide={() => setShowReviewerModal(false)}
+                                    />
+                                </>
+                            }
+                            {user.role === 'Legal Expert' &&
+                                <>
+                                    <Button onClick={handlePublishClick}>Publish</Button>
+                                    <PublishConfirmationModal
+                                        show={showPublishConfirmModal}
+                                        onHide={() => setShowPublishConfirmModal(false)}
+                                    />
+                                </>
+                            }
+                        </div>
                     </Col>
                 </Row>
             </Container>}
