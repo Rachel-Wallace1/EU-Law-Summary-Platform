@@ -4,7 +4,8 @@ import {useNavigate} from 'react-router-dom';
 import {useAuth} from './AuthContext';
 import PublishConfirmationModal from './PublishConfirmationModal';
 import {UserRole} from "./enums";
-import ReviewerSelectionModal from './ReviewerSelectionModal';
+import ReviewerSelectionModal from "./ReviewerSelectionModal";
+import RequestRevisionModal from "./RequestRevisionModal";
 
 function GenerateSummaryModal({show, onHide, celex, generateSummaryClick}) {
     return (
@@ -109,6 +110,7 @@ function ViewDocumentComponent({celex}) {
     const [modalShowDelete, setModalShowDelete] = React.useState(false);
     const [document, setDocument] = React.useState({});
     const [showReviewerModal, setShowReviewerModal] = React.useState(false);
+    const [showRequestRevisionModal, setShowRequestRevisionModal] = React.useState(false);
     const [showPublishConfirmModal, setShowPublishConfirmModal] = React.useState(false);
     const formattedSummary = document && document.current && document.current.summary
         ? sanitizeAndFormatString(document.current.summary)
@@ -183,6 +185,10 @@ function ViewDocumentComponent({celex}) {
         setShowReviewerModal(true);
     };
 
+    const handleRequestForRevisionClick = () => {
+        setShowRequestRevisionModal(!showRequestRevisionModal);
+    };
+
 
     const handlePublishClick = () => {
         setShowPublishConfirmModal(true);
@@ -221,6 +227,11 @@ function ViewDocumentComponent({celex}) {
                             }
                             {user.role === 'Legal Expert' &&
                                 <>
+                                    <Button variant="warning" onClick={handleRequestForRevisionClick}>Request for Revision</Button>
+                                    <RequestRevisionModal
+                                        show={showRequestRevisionModal}
+                                        onHide={handleRequestForRevisionClick}
+                                    />
                                     <Button onClick={handlePublishClick}>Publish</Button>
                                     <PublishConfirmationModal
                                         show={showPublishConfirmModal}
