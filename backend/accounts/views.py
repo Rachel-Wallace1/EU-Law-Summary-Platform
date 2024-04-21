@@ -93,6 +93,27 @@ class LogoutView(views.APIView):
         logout(request)
         return Response({'message': 'User Logged Out'})
 
+class UpdateRole(views.APIView):
+    """
+    User update role view
+    """
+
+    @swagger_auto_schema(
+        responses={200: 'User Logged In', 404: 'User not found'}
+    )
+
+    @csrf_exempt
+    def port(self, request):
+        username = request.data.get('username')
+        role = request.data.get('role')
+        user = User.objects.get(username=username)
+
+        if user is not None:
+            user.role = role
+            user.save()
+            return Response({'message': 'User role updated'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 # method to see all users in the database

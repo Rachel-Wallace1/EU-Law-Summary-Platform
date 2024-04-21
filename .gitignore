@@ -15,3 +15,4 @@ ec2-ssh.pem
 .idea/
 backend/staticfiles/
 backend/db.sqlite3
+.my_pgpass

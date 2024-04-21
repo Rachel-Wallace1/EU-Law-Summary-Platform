@@ -12,3 +12,4 @@ requests
 bs4
 nltk
 llmlingua
+psycopg2-binary

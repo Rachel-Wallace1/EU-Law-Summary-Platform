@@ -26,6 +26,7 @@ export mongoquerystringlocal='tls=true&tlsCAFile=backend/global-bundle.pem&repli
 
 export ec2instance='ssm-user@xxxx.compute-1.amazonaws.com'
 export docdbinstance='27017:xxxxx.xxxx.us-east-1.docdb.amazonaws.com:27017'
+export rdsinstance='5432:user-accounts-database.xxxxxx.us-east-1.rds.amazonaws.com:5432'
 
 ```
 
