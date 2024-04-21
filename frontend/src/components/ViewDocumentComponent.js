@@ -51,6 +51,32 @@ function GenerateSummaryModal({ show, onHide, celex, generateSummaryClick }) {
         </Modal>
     );
 }
+function DeleteSummaryModal({ show, onHide, celex, deleteSummaryClick }) {
+    return (
+        <Modal
+            show={show}
+            onHide={onHide}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Delete Summary
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form.Label htmlFor="celexId">Do you really want to delete this summary? This process cannot be undone.</Form.Label>
+                <Modal.Footer>
+                <Button variant="danger" onClick={deleteSummaryClick}>Yes, delete it</Button>
+                </Modal.Footer>
+            </Modal.Body>
+
+        </Modal>
+        
+
+    );
+}
 
 function sanitizeAndFormatString(str) {
     const escapedStr = str.replace(/[&<>"']/g, function(match) {
@@ -77,6 +103,7 @@ function sanitizeAndFormatString(str) {
 function ViewDocumentComponent({celex}) {
     const navigate = useNavigate();
     const [modalShow, setModalShow] = React.useState(false);
+    const [modalShowDelete, setModalShowDelete] = React.useState(false);
     const [document, setDocument] = React.useState({});
     const [showReviewerModal, setShowReviewerModal] = React.useState(false);
     const [showPublishConfirmModal, setShowPublishConfirmModal] = React.useState(false);
@@ -108,6 +135,29 @@ function ViewDocumentComponent({celex}) {
     const handleEditClick = () => {
         navigate(`/summary/${document.celexNumber}/edit`, {state: {document}})
     }
+    const handleDeleteClick = async(e) => {
+        
+        try {
+            const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    celexNumber: `${document.celexNumber}`,
+                })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to delete summary');
+            }
+    
+            // Navigate to the "/Summaries" page
+            navigate(`/Summaries`);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     const handleGenerateSummaryClick = () => {
         navigate(`/summary/${document.celexNumber}/new`, {state: {document}})
@@ -116,11 +166,6 @@ function ViewDocumentComponent({celex}) {
     const handleTimelineClick = () => {
         navigate(`/summary/${celex}/timeline`, {})
     }
-
-    const handleGenerateNewSummaryClick = () => {
-        navigate(`/generate_new_summary`)
-    }
-
 
     const handleReviewClick = () => {
         setShowReviewerModal(true);
@@ -142,9 +187,6 @@ function ViewDocumentComponent({celex}) {
                     </Col>
                     <Col xs="auto">
                         <div className="d-flex gap-2">
-                            <Button variant="primary" onClick={handleGenerateNewSummaryClick}>
-                                Generate Summary
-                            </Button>
                             <Button variant="primary" onClick={() => setModalShow(true)}>
                                 New Summary
                             </Button>
@@ -155,6 +197,13 @@ function ViewDocumentComponent({celex}) {
                                 generateSummaryClick={handleGenerateSummaryClick}
                             />
                             <Button variant="warning" onClick={handleEditClick}>Edit</Button>
+                            <Button variant="danger" onClick={() => setModalShowDelete(true)}>Delete</Button>
+                            <DeleteSummaryModal
+                                celex={celex}
+                                show={modalShowDelete}
+                                onHide={() => setModalShowDelete(false)}
+                                deleteSummaryClick={handleDeleteClick}
+                            />
                             <Button variant="success" onClick={handleReviewClick}>Send For Review</Button>
                             <ReviewerSelectionModal
                                 show={showReviewerModal}

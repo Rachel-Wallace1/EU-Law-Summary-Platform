@@ -59,6 +59,7 @@ class Database:
         return JsonResponse(json.loads(summaries), safe=False)
 
     @require_http_methods(["POST"])
+    @csrf_exempt
     def delete(request):
         json_data = json.loads(request.body)
 
