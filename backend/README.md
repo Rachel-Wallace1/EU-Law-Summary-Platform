@@ -3,6 +3,7 @@
 
 - Install Django backend here
 
+
 # Dependencies to install
 ```pip install -r requirements.txt```
 

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,6 +56,26 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',  # Set the desired log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',  # Set the desired log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+#             'propagate': True,
+#         },
+#     },
+# }
+
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -123,17 +144,32 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {
-            "service": "db_service",
-            "passfile": ".my_pgpass",
-        },
+if 'runserver' in sys.argv:
+    # Running server, use service and passfile for database configuration
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "OPTIONS": {
+                "service": "db_service",
+                "passfile": ".my_pgpass",
+            },
+        }
     }
-}
+else: 
+    # Collecting static files, use environment variables for database configuration
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv('DB_NAME'),
+            "USER": os.getenv('DB_USER'),
+            "PASSWORD": os.getenv('DB_PASSWORD'),
+            "HOST": os.getenv('DB_HOST'),
+            "PORT": os.getenv('DB_PORT'),
+        }
+    }
 
+
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
