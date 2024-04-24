@@ -17,7 +17,6 @@ from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-
 # Obtain the custom user model
 User = get_user_model()
 
@@ -72,10 +71,18 @@ class LoginView(views.APIView):
         if user is not None:
             login(request, user)
 
+            user_data = {
+                "username" : user.username,
+                "first_name" : user.first_name,
+                "last_name" : user.last_name,
+                "email" : user.email,
+                "role" : user.role
+            }
+
             # Generate JWT token
             token_serializer = TokenObtainPairSerializer(data=request.data)
             if token_serializer.is_valid():
-                return Response(token_serializer.validated_data, status=status.HTTP_200_OK)
+                return Response({"user_data" : user_data, "token" : token_serializer.validated_data}, status=status.HTTP_200_OK)
             return Response(token_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             # Providing more generic message to avoid enumeration attacks
@@ -103,18 +110,66 @@ class UpdateRole(views.APIView):
     )
 
     @csrf_exempt
-    def port(self, request):
-        username = request.data.get('username')
+    def post(self, request):
+        id = request.data.get('id')
         role = request.data.get('role')
-        user = User.objects.get(username=username)
 
-        if user is not None:
+        try:
+            user = User.objects.get(id=id)
             user.role = role
             user.save()
             return Response({'message': 'User role updated'}, status=status.HTTP_200_OK)
-        else:
+        except User.DoesNotExist:
             return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
 
+class Users(views.APIView):
+    """
+    Fetch all users
+    """
+    
+    @swagger_auto_schema(
+        responses={200: 'User Response', 404: 'Users not found'}
+    )
+
+    @csrf_exempt
+    def get(self, request):
+        users = User.objects.all()
+
+        user_list = []
+        for user in users:
+            user_info = {
+                "id" : user.id,
+                "username" : user.username,
+                "first_name" : user.first_name,
+                "last_name" : user.last_name,
+                "role" : user.role
+            }
+            user_list.append(user_info)
+
+        if users is not None:
+            return Response({'users': user_list}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'No users found'}, status=status.HTTP_404_NOT_FOUND)
+
+class UserDelete(views.APIView):
+    """
+    Delete specified user
+    """
+
+    @swagger_auto_schema(
+        responses={200: 'User Deleted', 404: 'User not found'}
+    )
+
+    @csrf_exempt
+    def post(self, request):
+        id = request.data.get('id')
+
+        try:
+            user = User.objects.get(id=id)
+            user.delete()
+            return Response({'message': 'User deleted'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
 
 # method to see all users in the database
 # TODO:

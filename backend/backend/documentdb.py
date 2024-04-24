@@ -1,7 +1,7 @@
 import pymongo
 import os
 import datetime
-from bson.json_util import dumps, loads
+from bson.json_util import dumps
 
 mongouser = os.getenv('mongouser')
 mongopass = os.getenv('mongopass')

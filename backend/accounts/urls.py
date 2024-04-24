@@ -21,5 +21,7 @@ urlpatterns = [
     path("signup/", views.UserCreate.as_view(), name="signup"),
     path("signin/", views.LoginView.as_view(), name="login"),
     path("signout/", views.LogoutView.as_view(), name="logout"),
-    
+    path("users/", views.Users.as_view(), name="users"),
+    path("updateRole/", views.UpdateRole.as_view(), name="updateRole"),
+    path("userDelete/", views.UserDelete.as_view(), name="userDelete")
 ]
