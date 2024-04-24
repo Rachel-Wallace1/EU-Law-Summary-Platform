@@ -12,56 +12,14 @@ from django.contrib import messages
 import json
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import OpenAIChatResponse
+from .token_compression import llmlingua_style_compress
 from .serializers import OpenAIChatResponseSerializer
-from .models import ChatGptBot
-import requests
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse,parse_qs
-import nltk 
-from llmlingua import PromptCompressor
-
-def check_url_content(url):
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-
-            soup = BeautifulSoup(response.content, 'html.parser')
-
-            return soup
-
-        else:
-            print("Failed to fetch content from the URL. Status code:", response.status_code)
-    except requests.exceptions.RequestException as e:
-        print("Error occurred while fetching content:", e)
-
-def get_celex(url):
-    parsed_url = urlparse(url)
-    query_params = parse_qs(parsed_url.query)
-    celex_number = query_params.get('uri')
-    
-    if celex_number:
-        celex_number_str = celex_number[0]
-        celex_number2 = celex_number_str.replace("CELEX:", "")
-
-        return celex_number2
-    else:
-        return None
-
-
-def get_text_content(content):
-    text_content = content.get_text()
-    return text_content
-
-def llmlingua_style_compress(prompt):
-    llm_lingua = PromptCompressor()
-    compressed_prompt = llm_lingua.compress_prompt(prompt, instruction="", question="", target_token=500)
-    print("compressed_prompt" + compressed_prompt)
-    return compressed_prompt['compressed_prompt']
+from .website_reader import check_url_content, get_celex, get_text_content
 
 class OpenAIChatAPIPostView(APIView):
 
     def post(self, request, *args, **kwargs):
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
         apiToken = request.data.get('apiToken', '')
 
@@ -79,6 +37,8 @@ class OpenAIChatAPIPostView(APIView):
         text_content = get_text_content(content)
 
         celex = get_celex(url)
+
+        compressed_text_content = llmlingua_style_compress(text_content)
 
         prompt_struc = """
         Here is the template for the summary structure should follow, make a very long summary:
@@ -107,8 +67,7 @@ class OpenAIChatAPIPostView(APIView):
         RELATED DOCUMENTS
         <titles of related documents if any>
         """
-        final_prompt = "given article : " + text_content + " with prompt  " + prompt_struc
-        #compressed_prompt = llmlingua_style_compress(final_prompt)
+        final_prompt = "given article : " + compressed_text_content + " with prompt  " + prompt_struc
         
         try:
             response = client.chat.completions.create(
