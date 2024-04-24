@@ -7,53 +7,6 @@ import {UserRole} from "./enums";
 import ReviewerSelectionModal from "./ReviewerSelectionModal";
 import RequestRevisionModal from "./RequestRevisionModal";
 
-function GenerateSummaryModal({show, onHide, celex, generateSummaryClick}) {
-    return (
-        <Modal
-            show={show}
-            onHide={onHide}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Generate Summary
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div key={`llm-model-radio`} className="mb-3">
-                    <Form.Check
-                        inline
-                        label="gpt4 LLM model"
-                        name="llm-radio"
-                        type='radio'
-                        id={`inline-radio-1`}
-                    />
-                    <Form.Check
-                        inline
-                        label="2nd LLM model"
-                        name="llm-radio"
-                        type='radio'
-                        id={`inline-radio-2`}
-                    />
-                </div>
-                <Form.Label htmlFor="celexId">Celex Number</Form.Label>
-                <Form.Control
-                    type="text"
-                    id="celexId"
-                    value={celex}
-                    disabled={true}
-                    aria-describedby="passwordHelpBlock"
-                />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="success" onClick={generateSummaryClick}>Generate Summary</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
 function DeleteSummaryModal({show, onHide, celex, deleteSummaryClick}) {
     return (
         <Modal
@@ -231,6 +184,7 @@ function ViewDocumentComponent({celex}) {
                                     <RequestRevisionModal
                                         show={showRequestRevisionModal}
                                         onHide={handleRequestForRevisionClick}
+                                        document={document}
                                     />
                                     <Button onClick={handlePublishClick}>Publish</Button>
                                     <PublishConfirmationModal

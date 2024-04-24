@@ -1,14 +1,63 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import {SummaryStatus} from "./enums";
 
-const RequestRevisionModal = ({ show, onHide }) => {
+const RequestRevisionModal = ({ document,currentUser, show, onHide }) => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [notes, setNotes] = useState('');
 
-    const handleRequestRevision = () => {
-        console.log(notes);
+    async function updateSummaryStatus() {
+        try {
+            const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    celexNumber: document.celexNumber,
+                    author: currentUser,
+                    status: SummaryStatus.REVISED,
+                    summary: document.current.summary,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update summary status');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function addNote() {
+        try {
+            const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/editNote`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    celexNumber: document.celexNumber,
+                    note: notes,
+                    version: document.current.v + 1,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add note');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const handleRequestRevision = async (e) => {
+        await addNote();
+        await updateSummaryStatus();
         onHide();
-    };
+    }
 
     return (
         <Modal show={show} onHide={onHide} centered>
