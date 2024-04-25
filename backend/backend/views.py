@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
 from django.views.decorators.http import require_http_methods
 import json
@@ -7,6 +6,21 @@ from .documentdb import DocumentdDB
 
 class Database:
     docdb = DocumentdDB()
+
+    categories = [
+        'agriculture',
+        'audiovisual-and-media',
+        'budge',
+        'competition',
+        'consumers',
+        'culture',
+        'customs',
+        'development',
+        'economic-and-monetary-affairs',
+        'energy',
+        'enlargement',
+        'enterprise',
+    ]
 
     @require_http_methods(["GET"])
     def edit(request, celexNumber):
@@ -27,7 +41,7 @@ class Database:
             status = json_data["status"]
             updatedSummary = json_data["summary"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.updateSummary(celexNumber, author, status, updatedSummary)
 
@@ -42,19 +56,26 @@ class Database:
             celexNumber = json_data["celexNumber"]
             title = json_data["title"]
             summary = json_data["summary"]
+            category = json_data["category"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
-        Database.docdb.insertSummary(celexNumber, title, summary)
+        if category not in Database.categories:
+            return HttpResponseServerError("Not a valid category")
+
+        Database.docdb.insertSummary(celexNumber, title, summary, category)
 
         return JsonResponse({"updatedSummary" : "nice submission"})
     
     @require_http_methods(["GET"])
-    def fetchAll(request, page=None):
-        if page is None:
-            page = 0
-        
-        summaries = Database.docdb.fetchAll(page)
+    def fetchAll(request):
+        page = int(request.GET.get('page', 0))
+        category = request.GET.get('category')
+
+        if category is not None and category not in Database.categories:
+            return HttpResponseServerError("Not a valid category")
+
+        summaries = Database.docdb.fetchAll(page, category)
 
         return JsonResponse(json.loads(summaries), safe=False)
 
@@ -66,7 +87,7 @@ class Database:
         try:
             celexNumber = json_data["celexNumber"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.delete(celexNumber)
 
@@ -95,7 +116,7 @@ class Database:
             note = json_data["note"]
             version = json_data["version"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.editNote(celexNumber, note, version)
 
@@ -110,7 +131,7 @@ class Database:
             celexNumber = json_data["celexNumber"]
             annotation = json_data["annotation"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.submitAnnotation(celexNumber, annotation)
 
@@ -124,7 +145,7 @@ class Database:
             celexNumber = json_data["celexNumber"]
             annotation = json_data["annotation"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.updateAnnotation(celexNumber, annotation)
 
@@ -137,7 +158,7 @@ class Database:
         try:
             celexNumber = json_data["celexNumber"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         annotations = Database.docdb.fetchAnnotations(celexNumber)
 
@@ -150,7 +171,7 @@ class Database:
         try:
             annotationId = json_data["id"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.deleteAnnotation(annotationId)
 
@@ -163,7 +184,7 @@ class Database:
         try:
             celexNumber = json_data["celexNumber"]
         except KeyError:
-            HttpResponseServerError("Malformed data in request")
+            return HttpResponseServerError("Malformed data in request")
 
         x = Database.docdb.deleteAllAnnotations(celexNumber)
 
