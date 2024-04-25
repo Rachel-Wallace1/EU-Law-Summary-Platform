@@ -29,26 +29,30 @@ function NavBar() {
                 <Navbar.Collapse id="basic-navbar-nav"> {/* Add this wrapper */}
                     <Nav className="ms-auto">
                         {isLoggedIn ? (
-                            // if logged in, show the logout button
-                            <Nav.Link as="div">
-                                <LogOut/>
-                            </Nav.Link>
-                        ) : (
-                            // if not logged in, show the sign up and sign in links
                             <>
                                 <Nav.Link as="div">
-                                    <Link to="/Summaries" className="nav-link">View
-                                        Summaries</Link> {/* Adjust the className */}
+                                    <Link to="/" className="nav-link">View
+                                        Summaries</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
                                     <Link to="/generate_new_summary" className="nav-link">Generate
-                                        Summaries</Link> {/* Adjust the className */}
+                                        Summaries</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
-                                    <Link to="/signup" className="nav-link">Sign Up</Link> {/* Adjust the className */}
+                                    <LogOut/>
+                                </Nav.Link>
+                            </>
+                        ) : (
+                            <>
+                                <Nav.Link as="div">
+                                    <Link to="/" className="nav-link">View
+                                        Summaries</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
-                                    <Link to="/signin" className="nav-link">Sign In</Link> {/* Adjust the className */}
+                                    <Link to="/signup" className="nav-link">Sign Up</Link>
+                                </Nav.Link>
+                                <Nav.Link as="div">
+                                    <Link to="/signin" className="nav-link">Sign In</Link>
                                 </Nav.Link>
                                 {isTesting && (
                                     <NavDropdown className="nav-link" title={user.role} id="navbarScrollingDropdown">
@@ -62,7 +66,7 @@ function NavBar() {
                             </>
                         )}
                     </Nav>
-                </Navbar.Collapse> {/* Close the wrapper */}
+                </Navbar.Collapse>
             </Navbar>
         </>
     );

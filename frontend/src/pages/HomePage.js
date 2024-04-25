@@ -1,16 +1,28 @@
-// HomePage.js
 import React from 'react';
-import './HomePage.css'; // Import the CSS for styling
+import { Container, Row, Col } from 'react-bootstrap';
+import PageHeaderComponent from "../components/PageHeaderComponent";
+import PublicSummariesComponent from "../components/PublicSummariesComponent";
+import { useAuth } from '../components/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const HomePage = () => {
+function HomePage() {
+    const { isLoggedIn } = useAuth();
+    const navigate = useNavigate();
+
+    if (isLoggedIn) {
+        navigate('/summaries');
+    }
+
     return (
-        <div className="home-container">
-            <h1>Welcome to EU Law App</h1>
-            <p>This is a temp external-facing page for citizens. Please check back for published summaries below in a few days.</p>
-            <p>{process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_MODE : process.env.REACT_APP_PRO_MODE}</p>
-            {/* add more content here later. */}
-        </div>
+        <Container className="summaries-page">
+            <PageHeaderComponent title='Summaries of EU Legislation by Topic'/>
+            <Row>
+                <Col>
+                    <PublicSummariesComponent />
+                </Col>
+            </Row>
+        </Container>
     );
-};
+}
 
 export default HomePage;

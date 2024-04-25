@@ -31,7 +31,6 @@ function App() {
             <Route path="/summary/:celex/timeline" element={<SummaryTimeline />} />
             <Route path="/summary/:celex/diff" element={<SummaryDiff />} />
             <Route path="/generate_new_summary" element={<GenerateNewSummary />} />
-            {/* Add other routes as needed */}
           </Routes>
         </AuthProvider>
       </div>

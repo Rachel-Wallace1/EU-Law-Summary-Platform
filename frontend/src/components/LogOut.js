@@ -18,7 +18,7 @@ function LogOut() {
     };
 
     return (
-        <button onClick={handleLogout} className="nav-link" style={{cursor: 'pointer', border: 'none', background: 'none', padding: '0', textDecoration: 'underline'}}>Sign Out</button>
+        <button onClick={handleLogout} className="nav-link">Sign Out</button>
     );
 }
 
