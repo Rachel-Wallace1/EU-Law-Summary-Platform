@@ -13,4 +13,4 @@ export const SummaryStatus = {
     PUBLISHED: 'Published',
 };
 
-export const SummaryStatuses = Object.values(UserRole);
+export const SummaryStatuses = Object.values(SummaryStatus);

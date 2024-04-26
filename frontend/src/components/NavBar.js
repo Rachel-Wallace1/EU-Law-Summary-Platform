@@ -39,6 +39,10 @@ function NavBar() {
                                         Summaries</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
+                                    <Link to="/manager" className="nav-link">Manager
+                                        View</Link>
+                                </Nav.Link>
+                                <Nav.Link as="div">
                                     <LogOut/>
                                 </Nav.Link>
                             </>

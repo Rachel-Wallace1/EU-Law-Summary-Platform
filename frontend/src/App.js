@@ -14,6 +14,7 @@ import {AuthProvider} from './components/AuthContext';
 import SummaryTimeline from "./pages/SummaryTimeline";
 import SummaryDiff from "./pages/SummaryDiff";
 import {CSRFTokenProvider} from "./components/CSRFTokenContext";
+import ManagerView from "./pages/ManagerView";
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                             <Route path="/summary/:celex/timeline" element={<SummaryTimeline/>}/>
                             <Route path="/summary/:celex/diff" element={<SummaryDiff/>}/>
                             <Route path="/generate_new_summary" element={<GenerateNewSummary/>}/>
+                            <Route path="/manager" element={<ManagerView/>}/>
                         </Routes>
                     </AuthProvider>
                 </CSRFTokenProvider>
