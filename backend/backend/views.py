@@ -3,6 +3,13 @@ from django.views.decorators.http import require_http_methods
 import json
 from django.views.decorators.csrf import csrf_exempt
 from .documentdb import DocumentdDB
+from django.middleware.csrf import get_token
+
+class Main:
+    def csrf(request):
+        get_token(request)
+        print(get_token(request))
+        return JsonResponse({'csrfToken': get_token(request)})
 
 class Database:
     docdb = DocumentdDB()

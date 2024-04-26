@@ -224,7 +224,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://lb-for-apps-1268694641.us-west-2.elb.amazonaws.com",
     "https://eu-law-summary.com",
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://lb-for-apps-1268694641.us-west-2.elb.amazonaws.com",
+    "http://eu-law-summary.com",
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "https://lb-for-apps-1268694641.us-west-2.elb.amazonaws.com",
+    "https://eu-law-summary.com",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False # for development only. switch to False in production
+
+CORS_ALLOW_CREDENTIALS = True

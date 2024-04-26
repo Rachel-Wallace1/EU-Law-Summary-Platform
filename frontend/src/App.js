@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
@@ -10,32 +10,35 @@ import EditSummary from './pages/EditSummary';
 import NewSummary from './pages/NewSummary';
 import GenerateNewSummary from './pages/GenerateNewSummary';
 import Summaries from "./pages/Summaries";
-import { AuthProvider } from './components/AuthContext';
+import {AuthProvider} from './components/AuthContext';
 import SummaryTimeline from "./pages/SummaryTimeline";
 import SummaryDiff from "./pages/SummaryDiff";
+import {CSRFTokenProvider} from "./components/CSRFTokenContext";
 
 function App() {
-  return (
-    <Router>
-      <div className="App">
-        <AuthProvider>
-          <NavBar />
-          <Routes>
-            <Route path="" element={<HomePage />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/summaries" element={<Summaries />} />
-            <Route path="/summary/:celex/view" element={<ViewSummary />} />
-            <Route path="/summary/:celex/edit" element={<EditSummary />} />
-            <Route path="/summary/:celex/new" element={<NewSummary />} />
-            <Route path="/summary/:celex/timeline" element={<SummaryTimeline />} />
-            <Route path="/summary/:celex/diff" element={<SummaryDiff />} />
-            <Route path="/generate_new_summary" element={<GenerateNewSummary />} />
-          </Routes>
-        </AuthProvider>
-      </div>
-    </Router>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <CSRFTokenProvider>
+                    <AuthProvider>
+                        <NavBar/>
+                        <Routes>
+                            <Route path="" element={<HomePage/>}/>
+                            <Route path="/signup" element={<SignUp/>}/>
+                            <Route path="/signin" element={<SignIn/>}/>
+                            <Route path="/summaries" element={<Summaries/>}/>
+                            <Route path="/summary/:celex/view" element={<ViewSummary/>}/>
+                            <Route path="/summary/:celex/edit" element={<EditSummary/>}/>
+                            <Route path="/summary/:celex/new" element={<NewSummary/>}/>
+                            <Route path="/summary/:celex/timeline" element={<SummaryTimeline/>}/>
+                            <Route path="/summary/:celex/diff" element={<SummaryDiff/>}/>
+                            <Route path="/generate_new_summary" element={<GenerateNewSummary/>}/>
+                        </Routes>
+                    </AuthProvider>
+                </CSRFTokenProvider>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

@@ -38,6 +38,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("api/admin/", admin.site.urls),
     path('api/', include('accounts.urls')),
+    path('api/csrf/', views.Main.csrf, name="csrf"),
     path('api/summaries/', include('llm.urls')),
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
