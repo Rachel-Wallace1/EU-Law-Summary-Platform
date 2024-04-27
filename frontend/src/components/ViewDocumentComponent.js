@@ -89,7 +89,6 @@ function ViewDocumentComponent({celex}) {
                     throw new Error(`Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data)
                 setDocument(data);
             } catch (error) {
                 console.error("Could not fetch summary by celex: ", error);

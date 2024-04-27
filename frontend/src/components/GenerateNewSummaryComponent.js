@@ -38,7 +38,6 @@ function GenerateNewSummaryComponent({document}) {
         setLoading(true);
         // Send request to OpenAI API
         try {
-            console.log('1. I was triggered during first block');
     
             const summary = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/summaries/openai/`, {
                 method: 'POST',
