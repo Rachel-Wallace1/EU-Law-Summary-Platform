@@ -6,7 +6,7 @@ import {useCSRFToken} from './CSRFTokenContext.js'
 function EditDocumentComponent({document}) {
     const {csrfToken} = useCSRFToken();
     const navigate = useNavigate();
-    const [documentText, setDocumentText] = useState(document.current.summary || '');
+    const [documentText, setDocumentText] = useState(document.current.summary || ''); // 
     const handleTextChange = (event) => {
         setDocumentText(event.target.value);
     };
@@ -14,10 +14,6 @@ function EditDocumentComponent({document}) {
 
     const handleCancelClick = () => {
         navigate(`/summary/${document.celexNumber}/view`)
-    };
-
-    const handleSaveClick = () => {
-        navigate(`/summary/${document.celexNumber}/view`, { state: { editedSummary: documentText } });
     };
 
 
@@ -60,7 +56,7 @@ function EditDocumentComponent({document}) {
                     <Col xs="auto">
                         <div className="d-flex gap-2">
                             <Button variant="danger" onClick={handleCancelClick}>Cancel</Button>
-                            <Button variant="success" onClick={handleSaveClick}>Save</Button>
+                            <Button variant="success"onClick={handleSaveClick}>Save</Button>
                         </div>
                     </Col>
                 </Row>

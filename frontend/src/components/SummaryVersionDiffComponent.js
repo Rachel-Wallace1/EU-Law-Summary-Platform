@@ -50,6 +50,8 @@ const fetchSummaryVersion = async (celex, version) => {
     }
 };
 
+const expertNotes = 'Lorem ipsum is simply dummy text of the printing and typesetting industry...';
+
 function SummaryVersionDiffComponent({celex, currentVersion, previousVersion}) {
     const [current, setCurrent] = useState();
     const [previous, setPrevious] = useState();
@@ -62,7 +64,6 @@ function SummaryVersionDiffComponent({celex, currentVersion, previousVersion}) {
                 const currResponse = await fetchSummaryVersion(celex, currentVersion);
                 setPrevious(prevResponse);
                 setCurrent(currResponse);
-                console.log(currResponse)
                 setLoading(false);
             } catch (error) {
                 console.error("Could not fetch summary by celex and version: ", error);
@@ -96,7 +97,7 @@ function SummaryVersionDiffComponent({celex, currentVersion, previousVersion}) {
                             <Card.Header><b>Legal Expert Notes</b></Card.Header>
                             <Card.Body>
                                 <Card.Text style={{fontSize: '1rem'}}>
-                                    {current && current.notes ? current.notes : 'No notes'}
+                                    {expertNotes}
                                 </Card.Text>
                             </Card.Body>
                         </Card>

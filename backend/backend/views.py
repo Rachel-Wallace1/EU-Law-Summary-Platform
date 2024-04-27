@@ -8,6 +8,7 @@ from django.middleware.csrf import get_token
 class Main:
     def csrf(request):
         get_token(request)
+        print(get_token(request))
         return JsonResponse({'csrfToken': get_token(request)})
 
 class Database:
@@ -120,11 +121,11 @@ class Database:
         try:
             celexNumber = json_data["celexNumber"]
             note = json_data["note"]
-            status = json_data["status"]
+            version = json_data["version"]
         except KeyError:
             return HttpResponseServerError("Malformed data in request")
 
-        x = Database.docdb.editNote(celexNumber, note, status)
+        x = Database.docdb.editNote(celexNumber, note, version)
 
         return JsonResponse(json.loads(x), safe=False)
 
