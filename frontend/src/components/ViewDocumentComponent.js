@@ -3,9 +3,10 @@ import {Card, Container, Row, Col, Button, Modal, Form} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from './AuthContext';
 import PublishConfirmationModal from './PublishConfirmationModal';
-import {UserRole} from "./enums";
+import {SummaryStatus, UserRole} from "./enums";
 import ReviewerSelectionModal from "./ReviewerSelectionModal";
 import RequestRevisionModal from "./RequestRevisionModal";
+import {useCSRFToken} from "./CSRFTokenContext";
 
 function DeleteSummaryModal({show, onHide, celex, deleteSummaryClick}) {
     return (
@@ -56,29 +57,37 @@ function sanitizeAndFormatString(str) {
     return formattedStr;
 }
 
-function ViewDocumentComponent({celex}) {
+function ViewDocumentComponent({celex, editedSummary}) {
     const navigate = useNavigate();
     const {user, setUser} = useAuth();
-    const [modalShow, setModalShow] = React.useState(false);
     const [modalShowDelete, setModalShowDelete] = React.useState(false);
+    const [currentSummary, setCurrentSummary] = React.useState('');
     const [document, setDocument] = React.useState({});
     const [showReviewerModal, setShowReviewerModal] = React.useState(false);
     const [showRequestRevisionModal, setShowRequestRevisionModal] = React.useState(false);
     const [showPublishConfirmModal, setShowPublishConfirmModal] = React.useState(false);
-    const formattedSummary = document && document.current && document.current.summary
-        ? sanitizeAndFormatString(document.current.summary)
-        : 'No existing summary found';
+    const [formattedSummary, setFormattedSummary] = React.useState();
 
     // TODO remove once we fetch user details from backend and is injected into user context
     useEffect(() => {
         setUser({
-            username: "rachel_wallace",
+            name: "Rachel Wallace",
             firstName: "Rachel",
             lastName: "Wallace",
             email: "r.wallacer12@gmail.com",
             role: UserRole.EDITOR,
         })
     }, [])
+    
+    useEffect(() => {
+        if (editedSummary && editedSummary !== "") {
+            setFormattedSummary(sanitizeAndFormatString(editedSummary))
+            setCurrentSummary(editedSummary)
+        } else if (document && document.current && document.current.summary) {
+            setFormattedSummary(sanitizeAndFormatString(document.current.summary))
+            setCurrentSummary(document.current.summary)
+        }
+    }, [editedSummary, document])
 
     // Onload call the backend to fetch the summary
     useEffect(() => {
@@ -142,15 +151,13 @@ function ViewDocumentComponent({celex}) {
     };
 
 
-    const handlePublishClick = () => {
+    const handlePublishClick = async () => {
         setShowPublishConfirmModal(true);
     }
 
     return (
         <Container>
-            {/*TODO re-add once document contains status*/}
-            {/*{document.status !== "published" && <Container>*/}
-            {<Container>
+            {document.status !== "Published" && <Container>
                 <Row className="justify-content-between" style={{marginBottom: '5px'}}>
                     <Col xs="auto">
                         <Button variant="primary" onClick={handleTimelineClick}>Timeline</Button>
@@ -159,9 +166,6 @@ function ViewDocumentComponent({celex}) {
                         <div className="d-flex gap-2">
                             {user.role === 'Editor' &&
                                 <>
-                                    <Button variant="primary" onClick={() => setModalShow(true)}>
-                                        New Summary
-                                    </Button>
                                     <Button variant="warning" onClick={handleEditClick}>Edit</Button>
                                     <Button variant="danger" onClick={() => setModalShowDelete(true)}>Delete</Button>
                                     <DeleteSummaryModal
@@ -174,6 +178,9 @@ function ViewDocumentComponent({celex}) {
                                     <ReviewerSelectionModal
                                         show={showReviewerModal}
                                         onHide={() => setShowReviewerModal(false)}
+                                        user={user}
+                                        document={document}
+                                        updatedText={currentSummary}
                                     />
                                 </>
                             }
@@ -184,11 +191,15 @@ function ViewDocumentComponent({celex}) {
                                         show={showRequestRevisionModal}
                                         onHide={handleRequestForRevisionClick}
                                         document={document}
+                                        user={user}
                                     />
                                     <Button onClick={handlePublishClick}>Publish</Button>
                                     <PublishConfirmationModal
                                         show={showPublishConfirmModal}
                                         onHide={() => setShowPublishConfirmModal(false)}
+                                        document={document}
+                                        user={user}
+                                        updatedText={currentSummary}
                                     />
                                 </>
                             }

@@ -159,7 +159,7 @@ class DocumentdDB:
         return versionSummary
 
     
-    def editNote(self, celexNumber, note, version):
+    def editNote(self, celexNumber, note, status):
         #Specify the collection to be used
         col = self.db.summaries
 
@@ -167,12 +167,9 @@ class DocumentdDB:
         #(technically just finds the first law with the Id)
         summary = col.find_one({"celexNumber" : celexNumber})
         
-        print(version)
         #Set the notes field for the specified version
-        if version == summary["current"]["v"]:
-            summary["current"]["notes"] = note
-        else:
-            summary["prev"][version - 1]["notes"] = note
+        summary["current"]["notes"] = note
+        summary["status"] = status
 
         #Insert the updated document
         result = col.replace_one({"celexNumber" : celexNumber}, summary)

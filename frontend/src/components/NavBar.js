@@ -45,11 +45,20 @@ function NavBar() {
                                 <Nav.Link as="div">
                                     <LogOut/>
                                 </Nav.Link>
+                                {isTesting && (
+                                    <NavDropdown className="nav-link" title={user.role} id="navbarScrollingDropdown">
+                                        {roles.map(role => (
+                                            <NavDropdown.Item key={role} onClick={() => handleRoleChange(role)}>
+                                                {role}
+                                            </NavDropdown.Item>
+                                        ))}
+                                    </NavDropdown>
+                                )}
                             </>
                         ) : (
                             <>
                                 <Nav.Link as="div">
-                                    <Link to="/" className="nav-link">View
+                                    <Link to="/summaries" className="nav-link">View
                                         Summaries</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
