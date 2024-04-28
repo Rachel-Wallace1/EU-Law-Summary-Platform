@@ -5,11 +5,13 @@ class CustomUser(AbstractUser):
     LEGAL_EXPERT = 1
     EDITOR = 2
     MANAGER = 3
+    CITIZEN = 4
     
     ROLE_CHOICES = {
         (LEGAL_EXPERT, 'Legal Expert'),
         (EDITOR, 'Editor'),
-        (MANAGER, 'Manager')
+        (MANAGER, 'Manager'),
+        (CITIZEN, 'Citizen')
     }
 
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=False, null=True)

@@ -25,7 +25,7 @@ const styles = {
 };
 
 function ManagerView() {
-    const [activeLink, setActiveLink] = useState('roles');
+    const [activeLink, setActiveLink] = useState('users');
 
     const handleLinkClick = (key) => {
         setActiveLink(key);
@@ -37,16 +37,8 @@ function ManagerView() {
                 <Col xs={12} md={3} lg={2} style={styles.sidebar}>
                     <Nav className="flex-column" variant="pills" activeKey={activeLink}>
                         <Nav.Item>
-                            <Nav.Link href="#roles" style={styles.navLink} eventKey="roles"
-                                      onClick={() => handleLinkClick('roles')}>Roles</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
                             <Nav.Link href="#users" style={styles.navLink} eventKey="users"
                                       onClick={() => handleLinkClick('users')}>Users</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="#workflows" style={styles.navLink} eventKey="workflows"
-                                      onClick={() => handleLinkClick('workflows')}>Workflows</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link href="#tasks" style={styles.navLink} eventKey="tasks"
@@ -55,10 +47,8 @@ function ManagerView() {
                     </Nav>
                 </Col>
                 <Col xs={12} md={9} lg={10}>
-                    <PageHeaderComponent title='Tasks in Pipeline'/>
-                    {activeLink === "roles" && <div>Roles content here</div>}
+                    <PageHeaderComponent title='Manager Settings'/>
                     {activeLink === "users" && <UserTableComponent/>}
-                    {activeLink === "workflows" && <div>Workflows content here</div>}
                     {activeLink === "tasks" && <ManagerTasksComponent/>}
                 </Col>
             </Row>
