@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Container, Row, Col, Nav} from 'react-bootstrap';
 import PageHeaderComponent from "../components/PageHeaderComponent";
 import ManagerTasksComponent from "../components/ManagerTasksComponent";
+import UserTableComponent from "../components/UserTableComponent";
 
 const styles = {
     sidebar: {
@@ -56,7 +57,7 @@ function ManagerView() {
                 <Col xs={12} md={9} lg={10}>
                     <PageHeaderComponent title='Tasks in Pipeline'/>
                     {activeLink === "roles" && <div>Roles content here</div>}
-                    {activeLink === "users" && <div>Users content here</div>}
+                    {activeLink === "users" && <UserTableComponent/>}
                     {activeLink === "workflows" && <div>Workflows content here</div>}
                     {activeLink === "tasks" && <ManagerTasksComponent/>}
                 </Col>

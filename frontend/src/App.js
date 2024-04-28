@@ -16,6 +16,7 @@ import SummaryDiff from "./pages/SummaryDiff";
 import {CSRFTokenProvider} from "./components/CSRFTokenContext";
 import ManagerView from "./pages/ManagerView";
 import Settings from "./pages/Settings";
+import UserTable from "./pages/UserTable";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                             <Route path="/generate_new_summary" element={<GenerateNewSummary/>}/>
                             <Route path="/manager" element={<ManagerView/>}/>
                             <Route path="/settings" element={<Settings/>}/>
+                            <Route path="/usertable" element={<UserTable/>}/>
                         </Routes>
                     </AuthProvider>
                 </CSRFTokenProvider>
