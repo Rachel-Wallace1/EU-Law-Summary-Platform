@@ -16,7 +16,7 @@ class Database:
     categories = [
         'agriculture',
         'audiovisual-and-media',
-        'budge',
+        'budget',
         'competition',
         'consumers',
         'culture',
@@ -63,13 +63,14 @@ class Database:
             title = json_data["title"]
             summary = json_data["summary"]
             category = json_data["category"]
+            subcategory = json_data["subcategory"]
         except KeyError:
             return HttpResponseServerError("Malformed data in request")
 
         if category not in Database.categories:
             return HttpResponseServerError("Not a valid category")
 
-        Database.docdb.insertSummary(celexNumber, title, summary, category)
+        Database.docdb.insertSummary(celexNumber, title, summary, category, subcategory)
 
         return JsonResponse({"updatedSummary" : "nice submission"})
     
@@ -77,11 +78,12 @@ class Database:
     def fetchAll(request):
         page = int(request.GET.get('page', 0))
         category = request.GET.get('category')
+        subcategory = request.GET.get('subcategory')
 
         if category is not None and category not in Database.categories:
             return HttpResponseServerError("Not a valid category")
 
-        summaries = Database.docdb.fetchAll(page, category)
+        summaries = Database.docdb.fetchAll(page, category, subcategory)
 
         return JsonResponse(json.loads(summaries), safe=False)
 

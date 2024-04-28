@@ -18,7 +18,7 @@ class DocumentdDB:
         #Specify the database to be used
         self.db = self.client.eulaw
 
-    def insertSummary(self, celexNumber, title, summary, category):
+    def insertSummary(self, celexNumber, title, summary, category, subcategory):
         #Specify the collection to be used
         col = self.db.summaries
 
@@ -30,6 +30,7 @@ class DocumentdDB:
                 "status" : "New",
                 "owner" : "",
                 "category" : category,
+                "subcategory" : subcategory,
                 "current" : {
                     "v" : 1,
                     "author" : "LegalBot",
@@ -80,25 +81,27 @@ class DocumentdDB:
 
         #Find the json object with the same celexNumber
         #(technically just finds the first law with the Id)
-        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "notes" : 1, "current" : 1})
+        summary = col.find_one({"celexNumber" : celexNumber}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "subcategory" : 1, "notes" : 1, "current" : 1})
 
         if summary is None:
             return None
         
         return dumps(summary)
 
-    def fetchAll(self, page, category):
+    def fetchAll(self, page, category, subcategory):
         #Specify the collection to be used
         col = self.db.summaries
 
         #For pagination we may want to skip some pages of results
         numberToSkip = 10 * page
 
-        if category is None:
-            summaries = col.find({}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "current.timestamp" : 1, "status" : 1}, skip=numberToSkip, limit=10)
+        if category is None and subcategory is None:
+            summaries = col.find({}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "subcategory" : 1, "current.timestamp" : 1, "status" : 1}, skip=numberToSkip, limit=10)
+        elif subcategory is None:
+            summaries = col.find({"category" : category}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "subcategory" : 1, "current.timestamp" : 1, "status" : 1}, skip=numberToSkip, limit=10)
         else:
-            summaries = col.find({"category" : category}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "current.timestamp" : 1, "status" : 1}, skip=numberToSkip, limit=10)
-        
+            summaries = col.find({"category" : category, "subcategory" : subcategory}, {"_id" : 0, "celexNumber" : 1, "title" : 1, "owner" : 1, "category" : 1, "subcategory" : 1, "current.timestamp" : 1, "status" : 1}, skip=numberToSkip, limit=10)
+
         #Dump is used to convert it from the pymongo cursor to a json dict
         return dumps(summaries)
 
