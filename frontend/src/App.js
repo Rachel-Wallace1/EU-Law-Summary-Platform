@@ -15,6 +15,7 @@ import SummaryTimeline from "./pages/SummaryTimeline";
 import SummaryDiff from "./pages/SummaryDiff";
 import {CSRFTokenProvider} from "./components/CSRFTokenContext";
 import ManagerView from "./pages/ManagerView";
+import Settings from "./pages/Settings";
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
                             <Route path="/summary/:celex/diff" element={<SummaryDiff/>}/>
                             <Route path="/generate_new_summary" element={<GenerateNewSummary/>}/>
                             <Route path="/manager" element={<ManagerView/>}/>
+                            <Route path="/settings" element={<Settings/>}/>
                         </Routes>
                     </AuthProvider>
                 </CSRFTokenProvider>

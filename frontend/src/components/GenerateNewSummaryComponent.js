@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Card, Container, Row, Col, Button, Form} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
+import { useCSRFToken } from './CSRFTokenContext';
 
 function GenerateNewSummaryComponent({document}) {
     const navigate = useNavigate();
@@ -12,6 +13,8 @@ function GenerateNewSummaryComponent({document}) {
     const [saved, setSaved] = useState(false);
     const [apiToken, setApiToken] = useState('');
     const [loading, setLoading] = useState(false);
+    const openai_key= localStorage.getItem('openai_key');
+    const {csrfToken} = useCSRFToken();
 
     const Waiting = () => {
         const [rotationAngle, setRotationAngle] = useState(0);
@@ -36,17 +39,20 @@ function GenerateNewSummaryComponent({document}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // Send request to OpenAI API
+        
+
         try {
     
             const summary = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/summaries/openai/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     input_message: inputText,
-                    apiToken: apiToken,
+                    apiToken:`${openai_key}`,
                 })
             });
             
@@ -59,15 +65,12 @@ function GenerateNewSummaryComponent({document}) {
             setIndex(0); 
         } catch (error) {
             console.error('Error:', error);
-            // Handle error
         } finally {
-            // Set loading state to false when API request completes (whether it succeeded or failed)
             setLoading(false);
         }
     };
     
     useEffect(() => {
-        // Start incremental display only after summary data and index are updated
         if (summary.length > 0) {
             startIncrementalDisplay();
         }
@@ -107,7 +110,6 @@ function GenerateNewSummaryComponent({document}) {
             summary: summary
           };
         
-          // Fetch API to post data
           fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/submit/`, {
             method: 'POST',
             headers: {
@@ -118,12 +120,10 @@ function GenerateNewSummaryComponent({document}) {
           })
           .then(response => {
             if (response.ok) {
-              // Data successfully saved
               setSaved(true);
               
               console.log('Data saved successfully!');
             } else {
-              // Error occurred while saving data
               console.error('Failed to save data.');
             }
           })
@@ -132,7 +132,6 @@ function GenerateNewSummaryComponent({document}) {
           });
         } catch (error) {
             console.error('Error:', error);
-            // Handle error
         }
       
       };
@@ -146,23 +145,26 @@ function GenerateNewSummaryComponent({document}) {
                     <Card>
                         <Card.Body>
                         <div class="input-group">
-                            {/* Input for API token */}
-                            <Form.Control
-                                type="password"
-                                name="apiToken"
-                                value={apiToken}
-                                onChange={(e) => setApiToken(e.target.value)}
-                                placeholder="Enter your OpenAI API token..."
-                            />
-                            
+                            {openai_key === null && (
+                                <Form.Control
+                                    type="password"
+                                    name="apiToken"
+                                    value={apiToken}
+                                    onChange={(e) => setApiToken(e.target.value)}
+                                    placeholder="Enter your OpenAI API token..."
+                                />
+                            )}
+
                             {/* Text input for EU HTML link */}
                             <Form.Control
                                 type="text"
                                 name="prompt"
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
-                                placeholder="EU HTML link..."
+                                placeholder="
+                                Enter EU link.."
                             />
+
                             <div>
                             {/* Conditionally render the Waiting component while loading is true */}
 

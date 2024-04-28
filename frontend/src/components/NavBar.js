@@ -43,6 +43,9 @@ function NavBar() {
                                         View</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
+                                    <Link to="/settings" className="nav-link">Settings</Link>
+                                </Nav.Link>
+                                <Nav.Link as="div">
                                     <LogOut/>
                                 </Nav.Link>
                                 {isTesting && (

@@ -34,11 +34,14 @@ function SignIn() {
                 throw new Error('Network response was not ok.');
             })
             .then(data => {
-                console.log('Success:', data);
 
                 // save the access and refresh tokens in local storage
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
+                localStorage.setItem('first_name', data.user_data.first_name);
+                localStorage.setItem('last_name', data.user_data.last_name);
+                localStorage.setItem('role', data.user_data.role);
+                localStorage.setItem('email', data.user_data.email);
 
                 // Redirect the user to the summaries page upon successful sign-in
                 navigate('/');
