@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 import './SignIn.css';
 import PageHeaderComponent from '../components/PageHeaderComponent';
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../components/AuthContext";
 
 function SignIn() {
     const navigate = useNavigate();
+    const { setIsLoggedIn } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -44,7 +46,8 @@ function SignIn() {
                 localStorage.setItem('email', data.user_data.email);
 
                 // Redirect the user to the summaries page upon successful sign-in
-                navigate('/');
+                setIsLoggedIn(true);
+                navigate('/summaries');
             })
             .catch((error) => {
                 console.error('Error:', error);
