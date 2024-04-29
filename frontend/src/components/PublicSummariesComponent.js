@@ -1,20 +1,7 @@
 import React from 'react';
 import {Container, Row, Col, Card} from 'react-bootstrap';
-import {
-    FaTractor,
-    FaMusic,
-    FaWallet,
-    FaStoreAlt,
-    FaUserFriends,
-    FaStreetView,
-    FaUserSecret,
-    FaHardHat,
-    FaMoneyBill,
-    FaBatteryHalf,
-    FaExpandArrowsAlt,
-    FaBusinessTime
-} from "react-icons/fa"
 import {useNavigate} from "react-router-dom";
+import {TopicFilters} from "./enums";
 
 const cardStyle = {
     cursor: 'pointer',
@@ -31,21 +18,6 @@ const iconStyle = {
     bottom: '15px',
     right: '15px',
 };
-
-const topics = [
-    {name: 'Agriculture', icon: <FaTractor/>, filter: 'agriculture'},
-    {name: 'Audiovisual and Media', icon: <FaMusic/>, filter: 'audiovisual-and-media'},
-    {name: 'Budget', icon: <FaWallet/>, filter: 'budget'},
-    {name: 'Competition', icon: <FaStoreAlt/>, filter: 'competition'},
-    {name: 'Consumers', icon: <FaUserFriends/>, filter: 'consumers'},
-    {name: 'Culture', icon: <FaStreetView/>, filter: 'culture'},
-    {name: 'Customs', icon: <FaUserSecret/>, filter: 'customs'},
-    {name: 'Development', icon: <FaHardHat/>, filter: 'development'},
-    {name: 'Economic and Monetary Affairs', icon: <FaMoneyBill/>, filter: 'economic-and-monetary-affairs'},
-    {name: 'Energy', icon: <FaBatteryHalf/>, filter: 'energy'},
-    {name: 'Enlargement', icon: <FaExpandArrowsAlt/>, filter: 'enlargement'},
-    {name: 'Enterprise', icon: <FaBusinessTime/>, filter: 'enterprise'},
-];
 
 function PublicSummariesComponent() {
     const navigate = useNavigate();
@@ -65,7 +37,7 @@ function PublicSummariesComponent() {
     return (
         <Container>
             <Row xs={1} md={2} lg={4} className="g-4">
-                {topics.map((topic, idx) => (
+                {TopicFilters.map((topic, idx) => (
                     <Col key={idx}>
                         <Card
                             style={cardStyle}

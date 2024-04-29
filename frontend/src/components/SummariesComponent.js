@@ -4,6 +4,9 @@ import Table from "./SummariesTableComponents/TableComponent";
 
 function SummariesComponent({category}) {
     const [summaryList, setSummaryList] = useState();
+    const [selectedCategory, setSelectedCategory] = useState(category || '');
+    const [categoryFilter, setCategoryFilter] = useState();
+    const [subCategoryFilter, setSubCategoryFilter] = useState('');
 
     useEffect(() => {
         const fetchSummaryList = async () => {
@@ -15,8 +18,11 @@ function SummariesComponent({category}) {
                 while (hasMoreData) {
                     let query = ""
                     query += `page=${pageIndex}`
-                    if (category && category !== "") {
-                        query += `&category=${category}`
+                    if (selectedCategory && selectedCategory !== "") {
+                        query += `&category=${selectedCategory}`
+                    }
+                    if (selectedCategory && selectedCategory !== "" && subCategoryFilter && subCategoryFilter !== "") {
+                        query += `&subcategory=${subCategoryFilter}`
                     }
                     const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/fetchAll?${query}`);
 
@@ -41,12 +47,14 @@ function SummariesComponent({category}) {
         };
 
         fetchSummaryList();
-    }, [])
+    }, [selectedCategory, subCategoryFilter])
 
     return (
         <Container>
             <Container>
-                <Table data={summaryList}/>
+                <Table data={summaryList} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryFilter={categoryFilter}
+                       setCategoryFilter={setCategoryFilter} subCategoryFilter={subCategoryFilter}
+                       setSubCategoryFilter={setSubCategoryFilter}/>
             </Container>
         </Container>
     );

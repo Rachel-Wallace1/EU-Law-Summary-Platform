@@ -3,13 +3,15 @@ import TableHeader from './TableHeader';
 import TableItem from './TableItem';
 import Filter from "./FilterComponent";
 import {useNavigate} from "react-router-dom";
+import FiltersContainer from "../CategoryAndSubCategoryFiltersComponent";
+import {TopicFilters} from "../enums";
 
 const tableStyles = {
     width: '100%',
     flexDirection: 'column',
 };
 
-const Table = ({data}) => {
+const Table = ({data, selectedCategory, setSelectedCategory, categoryFilter, setCategoryFilter, subCategoryFilter, setSubCategoryFilter}) => {
     const navigate = useNavigate();
     const [filterQuery, setFilterQuery] = useState('');
 
@@ -19,7 +21,12 @@ const Table = ({data}) => {
 
     return (
         <div>
-            <Filter onFilterChange={setFilterQuery}/>
+            <div className="d-flex justify-content-end mb-3">
+                <FiltersContainer categories={TopicFilters} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryFilter={categoryFilter}
+                                  setCategoryFilter={setCategoryFilter} subCategoryFilter={subCategoryFilter}
+                                  setSubCategoryFilter={setSubCategoryFilter}/>
+                <Filter onFilterChange={setFilterQuery}/>
+            </div>
             <div style={tableStyles}>
                 <TableHeader/>
                 {data !== undefined && data !== null && filteredData.map((item, index) => (

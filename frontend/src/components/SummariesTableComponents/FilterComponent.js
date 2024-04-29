@@ -18,7 +18,7 @@ const Filter = ({onFilterChange}) => {
     }
 
     return (
-        <div className="d-flex justify-content-end mb-3">
+        <>
             <Dropdown>
                 <Dropdown.Toggle style={toggleStyles} id="dropdown-filter">
                     <MdFilterList size={'22px'}/> {currentFilter}
@@ -33,7 +33,7 @@ const Filter = ({onFilterChange}) => {
                     <Dropdown.Item onClick={() => updateFilter('')}>All Statuses</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-        </div>
+        </>
     );
 };
 
