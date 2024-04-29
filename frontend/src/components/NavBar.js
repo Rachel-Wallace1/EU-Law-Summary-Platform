@@ -22,18 +22,22 @@ function NavBar() {
                                 <Nav.Link as="div">
                                     <Link to="/summaries" className="nav-link">View Summaries</Link>
                                 </Nav.Link>
-                                {userRole === UserRole.EDITOR && (
-                                    <>
-                                        <Nav.Link as="div">
-                                            <Link to="/generate_new_summary" className="nav-link">Generate
-                                                Summaries</Link>
-                                        </Nav.Link>
-                                        <Nav.Link as="div">
-                                            <Link to="/settings" className="nav-link">Settings</Link>
-                                        </Nav.Link>
-                                    </>
-                                )
-                                }
+                                { (userRole === UserRole.MANAGER || userRole === UserRole.EDITOR || userRole === UserRole.LEGAL_EXPERT ) && (
+                                <>
+                                    <Nav.Link as="div">
+                                    <Link to="/generate_new_summary" className="nav-link">Generate Summaries</Link>
+                                    </Nav.Link>
+                                </>
+                                )}
+
+                                {(userRole === UserRole.LEGAL_EXPERT  || userRole === UserRole.EDITOR || userRole === UserRole.MANAGER || userRole === UserRole.CITIZEN ) && (
+                                <>
+                                    <Nav.Link as="div">
+                                    <Link to="/settings" className="nav-link">Settings</Link>
+                                    </Nav.Link>
+                                </>
+                                )}
+
                                 {userRole === UserRole.MANAGER &&
                                     <Nav.Link as="div">
                                         <Link to="/manager" className="nav-link">Manager View</Link>

@@ -16,7 +16,7 @@
     font: poppins;
 }
 
-
+  
 /* Styling for the text description of the form */
 #signin-text {
     display: flex;
@@ -103,3 +103,11 @@
 .signin-container button[type="submit"]:hover {
     background-color: #035997; /* Darker shade of blue on hover */
 }
+
+p {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 22px;
+    line-height: 30px;
+    color: rgb(110, 110, 113); 
+  }
+

@@ -37,9 +37,9 @@ function App() {
                             <Route path="/summary/:celex/new" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR]}><NewSummary/></ProtectedRoute>}/>
                             <Route path="/summary/:celex/timeline" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR, UserRole.LEGAL_EXPERT, UserRole.MANAGER]}><SummaryTimeline/></ProtectedRoute>}/>
                             <Route path="/summary/:celex/diff" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR, UserRole.LEGAL_EXPERT, UserRole.MANAGER]}><SummaryDiff/></ProtectedRoute>}/>
-                            <Route path="/generate_new_summary" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR]}><GenerateNewSummary/></ProtectedRoute>}/>
+                            <Route path="/generate_new_summary" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR, UserRole.LEGAL_EXPERT, UserRole.MANAGER]}><GenerateNewSummary/></ProtectedRoute>}/>
                             <Route path="/manager" element={<ProtectedRoute allowedRoles={[UserRole.MANAGER]}><ManagerView/></ProtectedRoute>}/>
-                            <Route path="/settings" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR]}><Settings/></ProtectedRoute>}/>
+                            <Route path="/settings" element={<ProtectedRoute allowedRoles={[UserRole.EDITOR, UserRole.LEGAL_EXPERT, UserRole.MANAGER, UserRole.CITIZEN]}><Settings/></ProtectedRoute>}/>
                             <Route path="/usertable" element={<ProtectedRoute allowedRoles={[UserRole.MANAGER]}><UserTable/></ProtectedRoute>}/>
                         </Routes>
                     </AuthProvider>

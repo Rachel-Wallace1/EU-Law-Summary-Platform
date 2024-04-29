@@ -44,7 +44,8 @@ function GenerateNewSummaryComponent({document}) {
         
 
         try {
-    
+
+            
             const summary = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/summaries/openai/`, {
                 method: 'POST',
                 headers: {
@@ -54,9 +55,9 @@ function GenerateNewSummaryComponent({document}) {
                 credentials: 'include',
                 body: JSON.stringify({
                     input_message: inputText,
-                    tokenCompression: tokenCompression,
-                    temperature: temperature,
                     apiToken:`${openai_key}`,
+                    tokenCompression: `${tokenCompression}`,
+                    temperature: `${temperature}`,
                 })
             });
             
@@ -148,7 +149,7 @@ function GenerateNewSummaryComponent({document}) {
                 <Container>
                     <Card>
                         <Card.Body>
-                            {openai_key === null && (
+                            {/* {openai_key === null && (
                                 <Form.Control
                                     type="password"
                                     name="apiToken"
@@ -156,7 +157,7 @@ function GenerateNewSummaryComponent({document}) {
                                     onChange={(e) => setApiToken(e.target.value)}
                                     placeholder="Enter your OpenAI API token..."
                                 />
-                            )}
+                            )} */}
 
                             {/* Text input for EU HTML link */}
                             <Form.Control

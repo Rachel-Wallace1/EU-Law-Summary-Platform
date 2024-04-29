@@ -36,8 +36,8 @@ class OpenAIChatAPIPostView(APIView):
 
         apiToken = request.data.get('apiToken', '')
         user_input = request.data.get('input_message', '')
-        token_compression = request.data.get('tokenCompression', '')
-        temperature = request.data.get('temperature', '')
+        token_compression = bool(request.data.get('tokenCompression', False))
+        temperature = request.data.get('temperature', 0.7)
 
         client = OpenAI(
             # This is the default and can be omitted
@@ -66,7 +66,7 @@ class OpenAIChatAPIPostView(APIView):
                     }
                 ],
                 max_tokens=2000,   
-                temperature=temperature,   
+                temperature=float(temperature),   
                 stop=None,   
             )
             title = client.chat.completions.create(

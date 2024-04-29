@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './SignIn.css';
-
+import { UserRoleIntToStringMapping } from "../components/enums.js"; //frontend/src/components/enums.js
 import {
     FaUserGraduate
 } from "react-icons/fa"
@@ -17,13 +17,13 @@ function Settings() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
         localStorage.setItem('openai_key', openaiKey);
     };
 
+
     return (
         <>
-            <div className="signin-container">
+            <div className="signin-container" >
 
                 <div className="center-content" >
                     <h2>Account Info</h2>
@@ -31,10 +31,12 @@ function Settings() {
                 <div className="center-content">
                     <h1><FaUserGraduate /></h1>
                 </div>
-                <p>First Name: {userProfile.first_name}</p>
-                <p>Last Name: {userProfile.last_name}</p>
-                <p>Email: {userProfile.email}</p>
-                    
+                <div>
+                <p></p>
+                <p className="App">Name: {userProfile.first_name} {userProfile.last_name}</p>
+                <p className="App">Role: { UserRoleIntToStringMapping[userProfile.role] }</p>
+                <p className="App">Email: {userProfile.email}</p>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="openaiKey">OpenAI Key:</label>
                     <input
