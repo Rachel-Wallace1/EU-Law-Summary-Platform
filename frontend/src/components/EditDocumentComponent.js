@@ -2,22 +2,27 @@ import React, {useState} from 'react';
 import {Card, Container, Row, Col, Button, Form} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 
+// EditDocumentComponent component to edit document
 function EditDocumentComponent({document}) {
-    const navigate = useNavigate();
-
+    const navigate = useNavigate(); // hook from react router dom to enable navigation
     const [documentText, setDocumentText] = useState(document.current.summary || '');
+
+    // on document text change update the documentText state
     const handleTextChange = (event) => {
         setDocumentText(event.target.value);
     };
 
+    // on document text clear click update the documentText state to empty
     const handleClearSummaryClick = () => {
         setDocumentText('');
     };
 
+    // on cancel click, redirect back to the view document page
     const handleCancelClick = () => {
         navigate(`/summary/${document.celexNumber}/view`)
     };
 
+    // on save click, redirect back to the view document page with the update documentText
     const handleSaveClick = () => {
         navigate(`/summary/${document.celexNumber}/view`, { state: { editedSummary: documentText } });
     };

@@ -7,7 +7,7 @@ import PageHeaderComponent from "../components/PageHeaderComponent";
 function EditSummary() {
     let {celex} = useParams();
     const location = useLocation();
-    const {document} = location.state || {};
+    const {document} = location.state || {}; // get document from previous page, ViewDocument
 
     return (
         <Container className="summaries-page">

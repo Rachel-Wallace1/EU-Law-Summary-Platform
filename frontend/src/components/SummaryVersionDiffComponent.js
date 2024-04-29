@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Card, Container, Row, Col} from 'react-bootstrap';
 import {diffWordsWithSpace} from 'diff';
 
+// func using diffWordsWithSpace from diff library to generate a diff with styling
 function inlineDiffToHTML(oldText, newText) {
     const diffResult = diffWordsWithSpace(oldText, newText);
     return diffResult.map((part) => {
@@ -16,6 +17,7 @@ function inlineDiffToHTML(oldText, newText) {
     }).join('');
 }
 
+// returns the component displaying the actual summary version diff using inlineDiffToHTML func
 function DiffComponent({oldText, newText}) {
     if (newText === '') {
         return (
@@ -50,11 +52,13 @@ const fetchSummaryVersion = async (celex, version) => {
     }
 };
 
+// SummaryVersionDiffComponent displays the diff between two summary version using DiffComponent
 function SummaryVersionDiffComponent({celex, currentVersion, previousVersion}) {
     const [current, setCurrent] = useState();
     const [previous, setPrevious] = useState();
     const [loading, setLoading] = useState(true);
 
+    // onload, fetch the current and previous summary from the backend
     useEffect(() => {
         const fetchAndSetSummary = async () => {
             try {
@@ -62,7 +66,6 @@ function SummaryVersionDiffComponent({celex, currentVersion, previousVersion}) {
                 const currResponse = await fetchSummaryVersion(celex, currentVersion);
                 setPrevious(prevResponse);
                 setCurrent(currResponse);
-                console.log(currResponse)
                 setLoading(false);
             } catch (error) {
                 console.error("Could not fetch summary by celex and version: ", error);

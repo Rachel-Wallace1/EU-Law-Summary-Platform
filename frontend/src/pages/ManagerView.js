@@ -24,9 +24,11 @@ const styles = {
     }
 };
 
+// ManagerView component renders the UserTableComponent and ManagerTasksComponent
 function ManagerView() {
-    const [activeLink, setActiveLink] = useState('users');
+    const [activeLink, setActiveLink] = useState('users'); // sets the current sidebar tab to render, in this case users tab
 
+    // when a sidebar link is clicked (users or tasks) then the component chosen is rendered
     const handleLinkClick = (key) => {
         setActiveLink(key);
     };
@@ -48,8 +50,10 @@ function ManagerView() {
                 </Col>
                 <Col xs={12} md={9} lg={10}>
                     <PageHeaderComponent title='Manager Settings'/>
-                    {activeLink === "users" && <UserTableComponent/>}
-                    {activeLink === "tasks" && <ManagerTasksComponent/>}
+                    {activeLink === "users" && <UserTableComponent/>} {/* if activeLink is users then display UserTableComponent */}
+
+                    {/* ManagerTasksComponent renders the statuses columns with appropriate grouped summaries and enables dragging and dropping using atlassian @hello-pangea/dnd (used by JIRA) */}
+                    {activeLink === "tasks" && <ManagerTasksComponent/>} {/* if activeLink is tasks then display ManagerTasksComponent */}
                 </Col>
             </Row>
         </Container>

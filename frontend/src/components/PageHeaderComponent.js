@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 
+// PageHeaderComponent reusable component to set the page title
 function PageHeaderComponent({title}) {
     return (
         <Container className={'text-start'}

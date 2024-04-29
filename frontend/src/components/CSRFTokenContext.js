@@ -1,10 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const CSRFTokenContext = createContext();
+const CSRFTokenContext = createContext(); // creates context
 
+export const useCSRFToken = () => useContext(CSRFTokenContext); // method that can be used by any component to get the token
+
+// sets context up
 export const CSRFTokenProvider = ({ children }) => {
-    const [csrfToken, setCSRFToken] = useState('');
+    const [csrfToken, setCSRFToken] = useState(''); // local state for context
 
+    // calls backend /api/csrf/ to get the csrfToken and updates the state using setCSRFToken
     useEffect(() => {
         const fetchCSRFToken = async () => {
             try {
@@ -15,15 +19,16 @@ export const CSRFTokenProvider = ({ children }) => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                setCSRFToken(data.csrfToken);
+                setCSRFToken(data.csrfToken); // state is updated
             } catch (error) {
                 console.error("Could not fetch CSRF token", error);
             }
         };
 
-        fetchCSRFToken();
+        fetchCSRFToken(); // function we defined above is called here
     }, []);
 
+    // returns the csrfToken context to be accessible by any children component
     return (
         <CSRFTokenContext.Provider value={{ csrfToken, setCSRFToken }}>
             {children}
@@ -31,4 +36,3 @@ export const CSRFTokenProvider = ({ children }) => {
     );
 };
 
-export const useCSRFToken = () => useContext(CSRFTokenContext);

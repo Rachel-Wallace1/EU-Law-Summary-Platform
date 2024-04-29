@@ -3,9 +3,11 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import {SummaryStatus} from "./enums";
 import {useCSRFToken} from "./CSRFTokenContext";
 
+// publish confirmation modal component which calls backend to publish the summary
 const PublishConfirmationModal = ({ show, onHide, document, user, updatedText }) => {
-    const {csrfToken} = useCSRFToken()
+    const {csrfToken} = useCSRFToken() // get csrfToken from csrfToken context
 
+    // call backend to update summary status with "Published"
     async function updateSummaryStatus() {
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/update/`, {

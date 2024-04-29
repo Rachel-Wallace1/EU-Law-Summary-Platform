@@ -3,8 +3,11 @@ import {Card, Container, Row, Col, Button, Form} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import { useCSRFToken } from './CSRFTokenContext';
 
+// GenerateNewSummaryComponent component renders a form to generate a new summary
 function GenerateNewSummaryComponent({document}) {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // hook from react router dom enabling navigation
+    const {csrfToken} = useCSRFToken(); // get csrfToken from context
+    const openai_key = localStorage.getItem('openai_key'); // get openai_key from browser storage
     const [inputText, setInputText] = useState('');
     const [tokenCompression, setTokenCompression] = useState('');
     const [temperature, setTemperature] = useState('');
@@ -15,9 +18,8 @@ function GenerateNewSummaryComponent({document}) {
     const [saved, setSaved] = useState(false);
     const [apiToken, setApiToken] = useState('');
     const [loading, setLoading] = useState(false);
-    const openai_key= localStorage.getItem('openai_key');
-    const {csrfToken} = useCSRFToken();
 
+    // Waiting is a loading spinner component to display while summary is being generated
     const Waiting = () => {
         const [rotationAngle, setRotationAngle] = useState(0);
     
@@ -37,7 +39,9 @@ function GenerateNewSummaryComponent({document}) {
             </div>
         );
     };
-    
+
+    // on submit, call backend openai endpoint to generate new summary given input_message, tokenCompression, temperature, and apiToken
+    // on success, update summary state
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -74,13 +78,15 @@ function GenerateNewSummaryComponent({document}) {
             setLoading(false);
         }
     };
-    
+
+    // on summary OR index change, start the increment display interval
     useEffect(() => {
         if (summary.length > 0) {
             startIncrementalDisplay();
         }
     }, [summary, index]);
-    
+
+    // function to start an interval
     const startIncrementalDisplay = () => {
         const interval = setInterval(() => {
           if (index < summary.length) {
@@ -91,8 +97,7 @@ function GenerateNewSummaryComponent({document}) {
         }, 20);  
     };
     
-
-
+    // on clear summary click, clear summary
     const handleClearSummaryClick = () => {
         setCelexNumber(''); 
         setTitle(''); 
@@ -104,8 +109,7 @@ function GenerateNewSummaryComponent({document}) {
         navigate(`/summaries`)
     };
 
-
-
+    // function to call backend and save updated document
     const handleSave = async (e) => {
         e.preventDefault();
         try {

@@ -6,7 +6,7 @@ import SummaryTimelineComponent from "../components/SummaryTimelineComponent";
 
 
 function SummaryTimeline() {
-    let {celex} = useParams();
+    let {celex} = useParams(); // get celex from url params
 
     return (
         <Container className="summaries-page">

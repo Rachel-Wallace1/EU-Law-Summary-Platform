@@ -7,9 +7,10 @@ import NewDocumentComponent from "../components/GenerateNewSummaryComponent";
 import './NewSummary.css';
 import { FaFileAlt } from 'react-icons/fa';
 
+// NewSummary component displays a generate summary form
 function NewSummary() {
     const location = useLocation();
-    const {document} = location.state || {};
+    const {document} = location.state || {}; // get document from previous page
 
     return (
         <Container className="summaries-page">

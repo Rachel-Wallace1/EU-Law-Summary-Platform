@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
+// LogOut component logs the user out
 function LogOut() {
     let navigate = useNavigate();
     const { setIsLoggedIn, setUser } = useAuth();

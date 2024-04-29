@@ -12,9 +12,10 @@ const tableStyles = {
 };
 
 const Table = ({data, selectedCategory, setSelectedCategory, categoryFilter, setCategoryFilter, subCategoryFilter, setSubCategoryFilter}) => {
-    const navigate = useNavigate();
-    const [filterQuery, setFilterQuery] = useState('');
+    const navigate = useNavigate(); // hook from react router dom to enable navigation
+    const [filterQuery, setFilterQuery] = useState(''); // getter and setter for filterQuery used for filtering summaries
 
+    // filter through the summaries by the filter query to return the summaries that matches it
     const filteredData = data?.filter(item => {
         return (filterQuery === '' || item.status === filterQuery) && item.title !== '';
     }) || [];
@@ -22,11 +23,14 @@ const Table = ({data, selectedCategory, setSelectedCategory, categoryFilter, set
     return (
         <div>
             <div className="d-flex justify-content-end mb-3">
+                {/* Category and SubCategory filter components */}
                 <FiltersContainer categories={TopicFilters} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} categoryFilter={categoryFilter}
                                   setCategoryFilter={setCategoryFilter} subCategoryFilter={subCategoryFilter}
                                   setSubCategoryFilter={setSubCategoryFilter}/>
+                {/* Summary Status filter component */}
                 <Filter onFilterChange={setFilterQuery}/>
             </div>
+            {/* Render the Summary List table items */}
             <div style={tableStyles}>
                 <TableHeader/>
                 {data !== undefined && data !== null && filteredData.map((item, index) => (

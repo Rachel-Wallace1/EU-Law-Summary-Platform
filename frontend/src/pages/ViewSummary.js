@@ -6,9 +6,9 @@ import {useLocation, useParams} from "react-router-dom";
 
 
 function ViewSummary() {
-    let {celex} = useParams();
-    const location = useLocation();
-    const { editedSummary } = location.state || '';
+    let {celex} = useParams(); // hook from react router dom to get params from url
+    const location = useLocation(); // hook from react router dom to be able to pass data from previous pages
+    const { editedSummary } = location.state || ''; // get the editedSummary data from previous page
 
     return (
         <Container className="summaries-page">

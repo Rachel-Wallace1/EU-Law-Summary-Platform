@@ -20,16 +20,19 @@ const iconStyle = {
 };
 
 function PublicSummariesComponent() {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // hook from react router dom to enable navigation
 
+    // onClick, navigate user to /summaries with a category filter
     const handleClick = (filter) => {
         navigate(`/summaries?category=${filter}`)
     };
 
+    // onMouseOver, change the style to show a hover
     const handleMouseOver = (e) => {
         e.currentTarget.style.transform = 'scale(1.03)';
     };
 
+    // onMouseOut, change the style to show a non-hover
     const handleMouseOut = (e) => {
         e.currentTarget.style.transform = 'none';
     };
@@ -37,6 +40,7 @@ function PublicSummariesComponent() {
     return (
         <Container>
             <Row xs={1} md={2} lg={4} className="g-4">
+                {/* gets the TopicFilters from enums.js and iterates over them to create the Public Citizen View below */}
                 {TopicFilters.map((topic, idx) => (
                     <Col key={idx}>
                         <Card

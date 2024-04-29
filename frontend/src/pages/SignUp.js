@@ -4,7 +4,7 @@ import '../components/PageHeaderComponent';
 import PageHeaderComponent from '../components/PageHeaderComponent';
 
 function SignUp() {
-
+    // form data local state for sign up
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -13,11 +13,13 @@ function SignUp() {
         passwordConfirmation: '',
     });
 
+    // onChange, update the formData state
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
 
+    // onSubmit, make a call to the backend /api/signup/ to sign up the user with formData
     const handleSubmit = async (e) => {
         e.preventDefault();
         fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/signup/`, { // update to use your Django backend URL, or load as environment variable
@@ -47,6 +49,7 @@ function SignUp() {
         });
     };
 
+    // return sign up component
     return (
         <>
         <div className="signup-container">
@@ -62,7 +65,7 @@ function SignUp() {
             <div id="heading">
                 <h1>Sign Up</h1>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}> {/* on form submit, call backend /api/signup/ */}
                 <input
                     type="email"
                     name="email"

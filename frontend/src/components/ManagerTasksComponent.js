@@ -31,13 +31,13 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 function TaskCard({title, tasks, droppableId}) {
     return (
-        <Droppable droppableId={droppableId}>
+        <Droppable droppableId={droppableId}> {/* area where we can drop draggables */}
             {(provided, snapshot) => (
                 <Card ref={provided.innerRef} {...provided.droppableProps}>
                     <Card.Header>{title}</Card.Header>
                     <Card.Body>
                         {tasks.map((task, index) => (
-                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>  {/* area where we drag draggables */}
                                 {(provided, snapshot) => (
                                     <Card
                                         ref={provided.innerRef}
@@ -62,9 +62,10 @@ function TaskCard({title, tasks, droppableId}) {
     );
 }
 
+// ManagerTasksComponent renders the statuses columns with appropriate grouped summaries and enables dragging and dropping using atlassian @hello-pangea/dnd (used by JIRA)
 function ManagerTasksComponent() {
-    const {csrfToken} = useCSRFToken();
-    const {user} = useAuth();
+    const {csrfToken} = useCSRFToken(); // get csrfToken from context
+    const {user} = useAuth(); // get user from context
     const [summaryList, setSummaryList] = useState();
     const [tasks, setTasks] = useState({
         "New": [],
@@ -73,6 +74,7 @@ function ManagerTasksComponent() {
         "Published": []
     });
 
+    // onload, fetches the summary list
     useEffect(() => {
         const fetchSummaryList = async () => {
             let allData = [];
@@ -106,6 +108,7 @@ function ManagerTasksComponent() {
         fetchSummaryList();
     }, [])
 
+    // on summaryList changing, group the tasks by col statuses
     useEffect(() => {
         const formatSummaryToTask = (summary) => ({
             id: summary.celexNumber,
@@ -183,6 +186,7 @@ function ManagerTasksComponent() {
         }
     };
 
+    // function to call backend to update the summary status when it is dragged and dropped from one column to another
     const updateTaskStatus = async (celex, newStatus) => {
         let summary = "";
         try {
@@ -225,7 +229,7 @@ function ManagerTasksComponent() {
     };
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd}> {/* DragDropContext  is the area in which we can drag and drop draggables and droppables */}
             <Container fluid>
                 <Row>
                     {Object.keys(tasks).map(key => (

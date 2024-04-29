@@ -3,9 +3,11 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import {SummaryStatus} from "./enums";
 import {useCSRFToken} from "./CSRFTokenContext";
 
+// ReviewerSelectionModal component which calls backend to update the document with status "Pending Approval" and author
 const ReviewerSelectionModal = ({ show, onHide, user, document, updatedText }) => {
     const {csrfToken} = useCSRFToken()
 
+    // call backend to update the document with status "Pending Approval" and author
     async function updateSummaryStatus() {
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/update/`, {
@@ -32,6 +34,7 @@ const ReviewerSelectionModal = ({ show, onHide, user, document, updatedText }) =
         }
     }
 
+    // on "Send for Review" click call updateSummaryStatus function and hide modal
     const handleSendForReview = async () => {
         await updateSummaryStatus()
         onHide();

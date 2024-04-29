@@ -5,19 +5,20 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../components/AuthContext";
 
 function SignIn() {
-    const navigate = useNavigate();
-    const { setIsLoggedIn, setUser } = useAuth();
-    const [formData, setFormData] = useState({
+    const navigate = useNavigate(); // hook from react router dom to enable navigation
+    const { setIsLoggedIn, setUser } = useAuth(); // get setIsLoggedIn and setUser from auth context
+    const [formData, setFormData] = useState({ // local state for formData and setFormData
         email: '',
         password: '',
     });
 
+    // onChange, set formData with input value
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
     };
 
+    // on form submit, call to backend /api/signin/ to sign the user
     const handleSubmit = async (e) => {
-
         e.preventDefault();
         fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/signin/`, { // update url for prod
             method: 'POST',
@@ -36,8 +37,7 @@ function SignIn() {
                 throw new Error('Network response was not ok.');
             })
             .then(data => {
-
-                // save the access and refresh tokens in local storage
+                // on success, store user data from backend in to browser storage
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
                 localStorage.setItem('first_name', data.user_data.first_name);
@@ -45,7 +45,7 @@ function SignIn() {
                 localStorage.setItem('role', data.user_data.role);
                 localStorage.setItem('email', data.user_data.email);
 
-                // Redirect the user to the summaries page upon successful sign-in
+                // update isLoggedIn with true, update user data, and navigate to /summaries page
                 setIsLoggedIn(true);
                 setUser(data.user_data)
                 navigate('/summaries');
@@ -72,7 +72,7 @@ function SignIn() {
                 <div id="heading">
                     <h1>Sign In</h1>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}> {/* onSubmit, call the backend to sign the user in */}
                     <input
                         type="email"
                         name="email"

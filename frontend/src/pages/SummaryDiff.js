@@ -4,14 +4,13 @@ import PageHeaderComponent from "../components/PageHeaderComponent";
 import {useParams, useLocation} from "react-router-dom";
 import SummaryVersionDiffComponent from "../components/SummaryVersionDiffComponent";
 
-
+// SummaryDiff component displays the diff between two summary versions
 function SummaryDiff() {
-    let {celex} = useParams();
+    let {celex} = useParams(); // get celex from url params
     const location = useLocation();
-
     const searchParams = new URLSearchParams(location.search);
-    const currentVersion = searchParams.get('current');
-    const previousVersion = searchParams.get('previous');
+    const currentVersion = searchParams.get('current'); // get currentVersion from url params
+    const previousVersion = searchParams.get('previous'); // get previousVersion from url params
 
     return (
         <Container className="summaries-page">

@@ -5,16 +5,19 @@ import {
     FaUserGraduate
 } from "react-icons/fa"
 
+// Settings component displays the User Profile settings and the ability to update the Open API key
 function Settings() {
-
+    // userProfile fetches the user profile from the browser storage
     const userProfile = {
         role: localStorage.getItem('role'),
         last_name: localStorage.getItem('last_name'),
         first_name: localStorage.getItem('first_name'),
         email: localStorage.getItem('email'),
     };
+    // openaiKey fetches the openaiKey from the browser storage
     const [openaiKey, setOpenaiKey] = useState(localStorage.getItem('openai_key') || '');
 
+    // on "Save" click, update browser storage with Open AI key
     const handleSubmit = async (e) => {
         e.preventDefault();
         localStorage.setItem('openai_key', openaiKey);

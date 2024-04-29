@@ -3,11 +3,13 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import {SummaryStatus} from "./enums";
 import {useCSRFToken} from "./CSRFTokenContext";
 
+// RequestRevisionModal component which calls the backend to save the document with status "Revised" and a Legal Expert note
 const RequestRevisionModal = ({ document, show, onHide }) => {
-    const {csrfToken} = useCSRFToken();
+    const {csrfToken} = useCSRFToken(); // get csrfToken from context
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [notes, setNotes] = useState('');
 
+    // function call backend to store document with a note and "Revised" status
     async function addNote() {
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/editNote`, {
@@ -33,6 +35,7 @@ const RequestRevisionModal = ({ document, show, onHide }) => {
         }
     }
 
+    // on request revision "Send" click, call backend and hide modal
     const handleRequestRevision = async (e) => {
         await addNote();
         onHide();

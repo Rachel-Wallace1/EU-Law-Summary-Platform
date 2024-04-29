@@ -4,6 +4,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 import UserTableComponent from "../components/UserTableComponent";
 import PageHeaderComponent from "../components/PageHeaderComponent";
 
+// UserTable component to render the user table
 function UserTable() {
 
     return (

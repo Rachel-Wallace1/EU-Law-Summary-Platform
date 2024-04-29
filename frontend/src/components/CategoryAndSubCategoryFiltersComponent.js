@@ -9,9 +9,11 @@ const toggleStyles = {
     borderColor: '#eee',
 };
 
+// CategoryFilter component used for rendering a dropdown to choose from categories
 const CategoryFilter = ({ categories, selectedCategory, categoryFilter, onCategoryChange }) => {
-    const [currentCategory, setCurrentCategory] = useState(categoryFilter || 'Select Category');
+    const [currentCategory, setCurrentCategory] = useState(categoryFilter || 'Select Category'); // getter and setter for currentCategory, default value categoryFilter or "Select Category"
 
+    // if selectedCategory changes, find the selected category and set the current category and call onCategoryChange
     useEffect(() => {
         const currentCategoryObject = categories.find(category => category.filter === selectedCategory);
         if (currentCategoryObject) {
@@ -20,6 +22,7 @@ const CategoryFilter = ({ categories, selectedCategory, categoryFilter, onCatego
         }
     }, [selectedCategory])
 
+    // onCategoryUpdate, set current category name and call onCategoryChange
     const updateCategory = (category) => {
         setCurrentCategory(category.name);
         onCategoryChange(category);
@@ -33,8 +36,9 @@ const CategoryFilter = ({ categories, selectedCategory, categoryFilter, onCatego
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
+                    {/* iterate over categories, to list the dropdown items */}
                     {categories.map((category) => (
-                        <Dropdown.Item key={category.filter} onClick={() => updateCategory(category)}>
+                        <Dropdown.Item key={category.filter} onClick={() => updateCategory(category)}> {/* onClick, update category */}
                             {category.name}
                         </Dropdown.Item>
                     ))}
@@ -44,9 +48,11 @@ const CategoryFilter = ({ categories, selectedCategory, categoryFilter, onCatego
     );
 };
 
+// SubCategory Filter component used for rendering a dropdown to choose from subcategories
 const SubcategoryFilter = ({ subcategories, onSubcategoryChange }) => {
-    const [currentSubcategory, setCurrentSubcategory] = useState('Select Subcategory');
+    const [currentSubcategory, setCurrentSubcategory] = useState('Select Subcategory'); // getter and setter for current subcategory, default "SelectCategory"
 
+    // onSubcategoryChange, update current subcategory and call onSubcategoryChange
     const updateSubcategory = (subcategory) => {
         setCurrentSubcategory(subcategory);
         onSubcategoryChange(subcategory);
@@ -60,8 +66,9 @@ const SubcategoryFilter = ({ subcategories, onSubcategoryChange }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
+                    {/* iterate over subcategories list out dropdown items */}
                     {subcategories.map((sub) => (
-                        <Dropdown.Item key={sub} onClick={() => updateSubcategory(sub)}>
+                        <Dropdown.Item key={sub} onClick={() => updateSubcategory(sub)}> {/* onClick call updateSubCategory */}
                             {sub.replace(/-/g, ' ').replace(/\(.*?\)/g, '')}
                         </Dropdown.Item>
                     ))}
@@ -72,14 +79,16 @@ const SubcategoryFilter = ({ subcategories, onSubcategoryChange }) => {
 };
 
 const FiltersContainer = ({ categories, selectedCategory, setSelectedCategory, categoryFilter, setCategoryFilter, setSubCategoryFilter }) => {
-    const [subcategories, setSubcategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]); // getter and setter for the subCategory
 
+    // onCategoryChange, set selected category and subcategory
     const handleCategoryChange = (category) => {
         setCategoryFilter(category);
         setSelectedCategory(category.filter)
         setSubcategories(category.subcategories || []);
     };
 
+    // onSubcategoryChange, set the subcategory filter
     const handleSubCategoryChange = (subcategory) => {
         setSubCategoryFilter(subcategory);
     };
@@ -87,9 +96,11 @@ const FiltersContainer = ({ categories, selectedCategory, setSelectedCategory, c
     return (
         <>
             <div style={{ marginRight: '10px' }}>
+                {/* Category Filter Component */}
                 <CategoryFilter categories={categories} selectedCategory={selectedCategory} categoryFilter={categoryFilter} onCategoryChange={(category) => handleCategoryChange(category)} />
             </div>
             <div style={{ marginRight: '10px' }}>
+                {/* Sub Category Filter Component */}
                 {categoryFilter && <SubcategoryFilter subcategories={subcategories} onSubcategoryChange={(subcategory) => handleSubCategoryChange(subcategory)} />}
             </div>
         </>

@@ -8,6 +8,7 @@ const tableStyles = {
     flexDirection: 'column',
 };
 
+// SummaryTimelineTable table for summary version timeline
 const SummaryTimelineTable = ({celex, data}) => {
     const navigate = useNavigate();
 

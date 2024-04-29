@@ -6,15 +6,15 @@ import {useSearchParams} from "react-router-dom";
 
 
 function Summaries() {
-    let [searchParams, setSearchParams] = useSearchParams();
-    let category = searchParams.get('category');
+    let [searchParams, setSearchParams] = useSearchParams(); // hook from react router dom to get the search params from url
+    let category = searchParams.get('category'); // get category from url search params
 
     return (
         <Container className="summaries-page">
             <PageHeaderComponent title={'Summaries'}/>
             <Row>
                 <Col>
-                    <SummariesComponent category={category}/>
+                    <SummariesComponent category={category}/> {/* render SummariesComponent with props */}
                 </Col>
             </Row>
         </Container>

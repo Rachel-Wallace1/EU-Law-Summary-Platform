@@ -12,6 +12,7 @@ import {
     FaWallet
 } from "react-icons/fa";
 
+// UserRole mapping from name to string
 export const UserRole = {
     NO_ROLE_ASSIGNED: 'No Role Assigned',
     LEGAL_EXPERT: 'Legal Expert',
@@ -20,8 +21,10 @@ export const UserRole = {
     CITIZEN: 'Citizen',
 };
 
+// UserRole string array
 export const roles = Object.values(UserRole);
 
+// UserRoleIntToStringMapping mapping from backend int to string
 export const UserRoleIntToStringMapping = {
     null: 'No Role Assigned',
     1: 'Legal Expert',
@@ -30,6 +33,7 @@ export const UserRoleIntToStringMapping = {
     4: 'Citizen',
 };
 
+// UserRoleStringToIntMapping mapping from string to backend int
 export const UserRoleStringToIntMapping = {
     'No Role Assigned': 4, // default
     'Legal Expert': 1,
@@ -38,6 +42,7 @@ export const UserRoleStringToIntMapping = {
     'Citizen': 4,
 };
 
+// SummaryStatus mapping from name to string
 export const SummaryStatus = {
     NEW: 'New',
     REVISED: 'Revised',
@@ -45,8 +50,10 @@ export const SummaryStatus = {
     PUBLISHED: 'Published',
 };
 
+// SummaryStatus string array
 export const SummaryStatuses = Object.values(SummaryStatus);
 
+// TopicFilters array of Topic json objects with the name, icon, filter (backend category), and subcategories array (backend subcategory)
 export const TopicFilters = [
     {
         name: 'Agriculture',

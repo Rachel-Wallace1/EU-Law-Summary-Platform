@@ -3,10 +3,12 @@ import {Modal, Button, Form, Alert} from 'react-bootstrap';
 import {useCSRFToken} from "./CSRFTokenContext";
 import {roles, UserRoleStringToIntMapping} from "./enums";
 
+// EditUserModalComponent is a modal to edit the user that calls the backend to update the role
 const EditUserModalComponent = ({show, onHide, user, setCurrentUser}) => {
     const {csrfToken} = useCSRFToken();
     const [selectedRole, setSelectedRole] = useState(user.role || roles[0]);
 
+    // function to call backend and update role given a user id and role
     async function updateUserRole() {
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/updateRole/`, {
@@ -22,8 +24,6 @@ const EditUserModalComponent = ({show, onHide, user, setCurrentUser}) => {
                 })
             });
 
-            console.log(user.id, selectedRole)
-
             setCurrentUser(null)
             if (!response.ok) {
                 throw new Error('Failed to update user role');
@@ -33,6 +33,7 @@ const EditUserModalComponent = ({show, onHide, user, setCurrentUser}) => {
         }
     }
 
+    // on "Save" click, update the user role in the backend and hide modal
     const handleSaveUser = async () => {
         await updateUserRole();
         onHide();
@@ -51,6 +52,7 @@ const EditUserModalComponent = ({show, onHide, user, setCurrentUser}) => {
                             value={selectedRole}
                             onChange={(e) => setSelectedRole(e.target.value)}
                         >
+                            {/* displays a dropdown with possible roles values from enum.js */}
                             {roles.map((role, index) => (
                                 <option key={index} value={role}>
                                     {role}

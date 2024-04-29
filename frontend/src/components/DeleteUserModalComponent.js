@@ -3,10 +3,12 @@ import {Modal, Button, Form, Alert} from 'react-bootstrap';
 import {useCSRFToken} from "./CSRFTokenContext";
 import {roles, UserRoleStringToIntMapping} from "./enums";
 
+// DeleteUserModalComponent displays modal and calls backend to delete the user
 const DeleteUserModalComponent = ({show, onHide, user, setCurrentUser}) => {
-    const {csrfToken} = useCSRFToken();
+    const {csrfToken} = useCSRFToken(); // get csrfToken from context
     const [selectedRole, setSelectedRole] = useState(user.role || roles[0]);
 
+    // function that calls backend to delete user by id
     async function deleteUser() {
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/userDelete/`, {
@@ -30,6 +32,7 @@ const DeleteUserModalComponent = ({show, onHide, user, setCurrentUser}) => {
         }
     }
 
+    // on "Delete" click, delete user from backend and hide modal
     const handleDeleteUser = async () => {
         await deleteUser();
         onHide();

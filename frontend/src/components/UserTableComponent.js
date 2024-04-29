@@ -4,6 +4,7 @@ import EditUserModalComponent from "./EditUserModalComponent";
 import { UserRoleIntToStringMapping } from "./enums";
 import DeleteUserModalComponent from "./DeleteUserModalComponent";
 
+// ShowUser renders the user table with id, name, email, role, actions columns and rows
 const ShowUser = () => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
@@ -11,10 +12,12 @@ const ShowUser = () => {
     const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
 
+    // get the list of users onload
     useEffect(() => {
         getUsers();
     }, [currentUser]);
 
+    // function that calls backend to get user lists. sorts them in ascending order by id
     const getUsers = async () => {
         try {
             const response = await fetch(`${process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_LOCAL : process.env.REACT_APP_API_URL_DNS}/api/users/`);
@@ -31,11 +34,13 @@ const ShowUser = () => {
         }
     };
 
+    // on "Update Role" load modal to update the user role
     const handleEditUserClick = (user) => {
         setCurrentUser(user);
         setShowEditUserModal(true);
     };
 
+    // on "Delete" load modal to delete the user
     const handleDeleteUserClick = (user) => {
         setCurrentUser(user);
         setShowDeleteUserModal(true);
@@ -69,6 +74,7 @@ const ShowUser = () => {
                 ))}
                 </tbody>
             </table>
+            {/* display the edit user role modal, when currentUser AND showEditUserModal are defined */}
             {currentUser && (
                 <EditUserModalComponent
                     show={showEditUserModal}
@@ -77,6 +83,7 @@ const ShowUser = () => {
                     setCurrentUser={setCurrentUser}
                 />
             )}
+            {/* display the delete user modal, when currentUser AND showDeleteUserModal are defined */}
             {currentUser && (
                 <DeleteUserModalComponent
                     show={showDeleteUserModal}

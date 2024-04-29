@@ -2,9 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {Container} from 'react-bootstrap';
 import SummaryTimelineTable from "./SummaryTimelineTableComponents/TableComponent";
 
+// SummaryTimelineComponent renders summary version timeline
 function SummaryTimelineComponent({celex}) {
     const [timelineList, setTimelineList] = useState();
 
+    // call backend to get the timeline versions for the summary by celex
     useEffect(() => {
         const fetchTimeline = async () => {
 
