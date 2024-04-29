@@ -20,6 +20,17 @@ from .prompt import prompt_styling
 
 class OpenAIChatAPIPostView(APIView):
 
+    def html_format(self, text):
+        out = text.replace('\n', '<br>')
+        output = []
+        for line in text.split('\n'):
+            if line.isupper():
+                output.append(f'<b>{line}</b><br>')
+            else:
+                output.append(line+'<br>')
+
+        return ''.join(output)
+
     def post(self, request, *args, **kwargs):
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -70,9 +81,10 @@ class OpenAIChatAPIPostView(APIView):
             )
 
             bot_response = response.choices[0].message.content
+            bot_html = self.html_format(bot_response)
             title = title.choices[0].message.content
             if response.object == 'chat.completion':
-                return Response({"bot_response": bot_response, "celex": celex, "title": title}, status=status.HTTP_201_CREATED)
+                return Response({"bot_response": bot_html, "celex": celex, "title": title}, status=status.HTTP_201_CREATED)
             else:
                 return render(request,  "success.html", {"updatedSummary" : bot_response})
             

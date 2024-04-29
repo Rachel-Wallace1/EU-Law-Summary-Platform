@@ -246,13 +246,12 @@ function GenerateNewSummaryComponent({document}) {
                                 {/* Summary textarea */}
                                 <Form.Group controlId="summary">
                                     {loading && <Waiting />}
-                                    <Form.Control
-                                    as="textarea"
-                                    rows={50}
-                                    value={summary.slice(0, index)}
-                                    onChange={(e) => setsummary(e.target.value)}
-                                    disabled={saved}
-                                    />
+                                    <div
+                                        style={{ minHeight: '550px', border: '1px solid #ced4da', padding: '5px' }}
+                                        onBlur={(e) => setsummary(e.target)}
+                                        dangerouslySetInnerHTML={{ __html: summary.slice(0, index) }}
+                                        disabled={saved}
+                                    ></div>
                                 </Form.Group>
                             {/* Save button */}
                                 <Button type="submit2" className="btn btn-success" disabled={saved}>
