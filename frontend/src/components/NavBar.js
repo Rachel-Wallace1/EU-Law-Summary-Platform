@@ -1,68 +1,52 @@
 import React from 'react';
 import {Navbar, Nav, NavDropdown, Alert} from 'react-bootstrap';
-import {Link, useLocation} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import LogOut from './LogOut';
 import {useAuth} from './AuthContext';
-import {roles} from "./enums";
+import {roles, UserRole, UserRoleIntToStringMapping} from "./enums";
 
 function NavBar() {
     const {isLoggedIn, user, setUser} = useAuth();
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const isTesting = queryParams.get('test') === 'true';
-
-    const handleRoleChange = (newRole) => {
-        setUser({...user, role: newRole});
-    };
+    const userRole = user.role ? UserRoleIntToStringMapping[user.role] : UserRole.NO_ROLE_ASSIGNED
 
     return (
         <>
-            {isTesting && (
-                <Alert variant="warning" className="text-center">
-                    You are currently in test mode
-                </Alert>
-            )}
             <Navbar className="bg-body-tertiary" expand="lg" sticky="top"
                     style={{paddingLeft: '30px', paddingRight: '30px'}}>
                 <Navbar.Brand href="/"><strong>EU Law</strong></Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav"/> {/* Add aria-controls */}
-                <Navbar.Collapse id="basic-navbar-nav"> {/* Add this wrapper */}
+                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        {isLoggedIn ? (
+                        {isLoggedIn && user ? (
                             <>
                                 <Nav.Link as="div">
-                                    <Link to="/" className="nav-link">View
-                                        Summaries</Link>
+                                    <Link to="/summaries" className="nav-link">View Summaries</Link>
                                 </Nav.Link>
-                                <Nav.Link as="div">
-                                    <Link to="/generate_new_summary" className="nav-link">Generate
-                                        Summaries</Link>
-                                </Nav.Link>
-                                <Nav.Link as="div">
-                                    <Link to="/manager" className="nav-link">Manager
-                                        View</Link>
-                                </Nav.Link>
-                                <Nav.Link as="div">
-                                    <Link to="/settings" className="nav-link">Settings</Link>
-                                </Nav.Link>
+                                {userRole === UserRole.EDITOR && (
+                                    <>
+                                        <Nav.Link as="div">
+                                            <Link to="/generate_new_summary" className="nav-link">Generate
+                                                Summaries</Link>
+                                        </Nav.Link>
+                                        <Nav.Link as="div">
+                                            <Link to="/settings" className="nav-link">Settings</Link>
+                                        </Nav.Link>
+                                    </>
+                                )
+                                }
+                                {userRole === UserRole.MANAGER &&
+                                    <Nav.Link as="div">
+                                        <Link to="/manager" className="nav-link">Manager View</Link>
+                                    </Nav.Link>
+                                }
                                 <Nav.Link as="div">
                                     <LogOut/>
                                 </Nav.Link>
-                                {isTesting && (
-                                    <NavDropdown className="nav-link" title={user.role} id="navbarScrollingDropdown">
-                                        {roles.map(role => (
-                                            <NavDropdown.Item key={role} onClick={() => handleRoleChange(role)}>
-                                                {role}
-                                            </NavDropdown.Item>
-                                        ))}
-                                    </NavDropdown>
-                                )}
                             </>
                         ) : (
                             <>
                                 <Nav.Link as="div">
-                                    <Link to="/summaries" className="nav-link">View
-                                        Summaries</Link>
+                                    <Link to="/summaries" className="nav-link">View Summaries</Link>
                                 </Nav.Link>
                                 <Nav.Link as="div">
                                     <Link to="/signup" className="nav-link">Sign Up</Link>
@@ -70,15 +54,6 @@ function NavBar() {
                                 <Nav.Link as="div">
                                     <Link to="/signin" className="nav-link">Sign In</Link>
                                 </Nav.Link>
-                                {isTesting && (
-                                    <NavDropdown className="nav-link" title={user.role} id="navbarScrollingDropdown">
-                                        {roles.map(role => (
-                                            <NavDropdown.Item key={role} onClick={() => handleRoleChange(role)}>
-                                                {role}
-                                            </NavDropdown.Item>
-                                        ))}
-                                    </NavDropdown>
-                                )}
                             </>
                         )}
                     </Nav>

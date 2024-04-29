@@ -6,7 +6,7 @@ import {useAuth} from "../components/AuthContext";
 
 function SignIn() {
     const navigate = useNavigate();
-    const { setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn, setUser } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -47,6 +47,7 @@ function SignIn() {
 
                 // Redirect the user to the summaries page upon successful sign-in
                 setIsLoggedIn(true);
+                setUser(data.user_data)
                 navigate('/summaries');
             })
             .catch((error) => {

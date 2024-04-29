@@ -208,7 +208,7 @@ function ManagerTasksComponent() {
                 credentials: 'include',
                 body: JSON.stringify({
                     celexNumber: celex,
-                    author: user.name,
+                    author: (user.first_name + " " + user.last_name) || 'No name',
                     status: newStatus,
                     summary: summary
                 })

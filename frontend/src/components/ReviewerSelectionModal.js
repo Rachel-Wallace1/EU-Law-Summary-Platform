@@ -17,7 +17,7 @@ const ReviewerSelectionModal = ({ show, onHide, user, document, updatedText }) =
                 credentials: 'include',
                 body: JSON.stringify({
                     celexNumber: document.celexNumber,
-                    author: user.name,
+                    author: (user.first_name + " " + user.last_name) || 'No name',
                     status: SummaryStatus.PENDING_APPROVAL,
                     summary: updatedText,
                 })

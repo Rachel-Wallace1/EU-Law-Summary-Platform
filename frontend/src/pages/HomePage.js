@@ -4,13 +4,17 @@ import PageHeaderComponent from "../components/PageHeaderComponent";
 import PublicSummariesComponent from "../components/PublicSummariesComponent";
 import { useAuth } from '../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import {UserRole, UserRoleIntToStringMapping} from "../components/enums";
 
 function HomePage() {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user } = useAuth();
+    const userRoleAsString = UserRoleIntToStringMapping[user.role];
     const navigate = useNavigate();
 
     if (isLoggedIn) {
-        navigate('/summaries');
+        if ([UserRole.MANAGER, UserRole.EDITOR, UserRole.LEGAL_EXPERT].includes(userRoleAsString)) {
+            navigate('/summaries');
+        }
     }
 
     return (

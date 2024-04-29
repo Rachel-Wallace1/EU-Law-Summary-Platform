@@ -17,7 +17,7 @@ const PublishConfirmationModal = ({ show, onHide, document, user, updatedText })
                 credentials: 'include',
                 body: JSON.stringify({
                     celexNumber: document.celexNumber,
-                    author: user.name,
+                    author: (user.first_name + " " + user.last_name) || 'No name',
                     status: SummaryStatus.PUBLISHED,
                     summary: updatedText,
                 })

@@ -1,4 +1,5 @@
 export const UserRole = {
+    NO_ROLE_ASSIGNED: 'No Role Assigned',
     LEGAL_EXPERT: 'Legal Expert',
     EDITOR: 'Editor',
     MANAGER: 'Manager',
