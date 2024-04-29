@@ -10,6 +10,16 @@ form {
     box-shadow: 0 4px 8px rgba(85, 114, 18, 0.1);
     border-radius: 8px;
 }
+.wider-range {
+    width: 100%; /* Adjust width as needed */
+}
+
+.token-compression {
+    background-color: LemonChiffon;
+    padding: 5px; /* Adjust padding as needed */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+    /* Add additional styling as desired */
+}
 
 /* Styling for each input field */
 input[type="celexId"],

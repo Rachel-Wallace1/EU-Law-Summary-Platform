@@ -6,6 +6,8 @@ import { useCSRFToken } from './CSRFTokenContext';
 function GenerateNewSummaryComponent({document}) {
     const navigate = useNavigate();
     const [inputText, setInputText] = useState('');
+    const [tokenCompression, setTokenCompression] = useState('');
+    const [temperature, setTemperature] = useState('');
     const [summary, setsummary] = useState('');
     const [index, setIndex] = useState(0);
     const [celexNumber, setCelexNumber] = useState('');
@@ -52,6 +54,8 @@ function GenerateNewSummaryComponent({document}) {
                 credentials: 'include',
                 body: JSON.stringify({
                     input_message: inputText,
+                    tokenCompression: tokenCompression,
+                    temperature: temperature,
                     apiToken:`${openai_key}`,
                 })
             });
@@ -144,7 +148,6 @@ function GenerateNewSummaryComponent({document}) {
                 <Container>
                     <Card>
                         <Card.Body>
-                        <div class="input-group">
                             {openai_key === null && (
                                 <Form.Control
                                     type="password"
@@ -164,6 +167,38 @@ function GenerateNewSummaryComponent({document}) {
                                 placeholder="
                                 Enter EU link.."
                             />
+                            <div class="token-compression">
+                            <Form.Group controlId="tokenCompressionSwitch">
+                            <Form.Check
+                                type="switch"
+                                id="tokenCompressionSwitch"
+                                label="Token Compression"
+                                checked={tokenCompression}
+                                onChange={(e) => setTokenCompression(e.target.checked)}
+                            />
+                            </Form.Group>
+
+                            <Form.Group controlId="temperature">
+                                <Form.Label>Temperature</Form.Label>
+                                <input
+                                    type="range"
+                                    id="temperature"
+                                    className="wider-range"  
+                                    min={0}
+                                    max={1}
+                                    step={0.1}
+                                    value={temperature}
+                                    onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                                    style={{
+                                        background: `linear-gradient(to right, blue ${temperature * 100}%, red ${temperature * 100}%)`,
+                                        width: '100%',
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                                <Form.Text>Current number: {temperature}</Form.Text>
+                            </Form.Group>
+
+                            </div>
 
                             <div>
                             {/* Conditionally render the Waiting component while loading is true */}
@@ -176,7 +211,6 @@ function GenerateNewSummaryComponent({document}) {
                             </Col>
                             </div>
                             
-                        </div>
                         </Card.Body>
                     </Card>
                 </Container>

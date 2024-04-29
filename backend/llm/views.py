@@ -15,6 +15,8 @@ from rest_framework.decorators import api_view
 from .token_compression import llmlingua_style_compress
 from .serializers import OpenAIChatResponseSerializer
 from .website_reader import check_url_content, get_celex, get_text_content
+from .prompt import prompt_styling
+
 
 class OpenAIChatAPIPostView(APIView):
 
@@ -22,52 +24,26 @@ class OpenAIChatAPIPostView(APIView):
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
         apiToken = request.data.get('apiToken', '')
+        user_input = request.data.get('input_message', '')
+        token_compression = request.data.get('tokenCompression', '')
+        temperature = request.data.get('temperature', '')
 
         client = OpenAI(
             # This is the default and can be omitted
             api_key=apiToken,
         )
 
-        user_input = request.data.get('input_message', '')
-
         url = str(user_input).strip()
-
         content = check_url_content(url)
-
         text_content = get_text_content(content)
-
         celex = get_celex(url)
 
-        compressed_text_content = llmlingua_style_compress(text_content)
+        if token_compression:
+            text_content = llmlingua_style_compress(text_content)
+            
+        prompt_struc = prompt_styling()
 
-        prompt_struc = """
-        Here is the template for the summary structure should follow, make a very long summary:
-
-        SUMMARY OF:
-        - [titles of the original resource(s) in bullet form and hyperlinked]
-
-        WHAT IS THE AIM OF ......?
-        <content here>
-
-        KEY POINTS
-        <content here>
-
-        FROM WHEN DOES THE DECISION APPLY?
-        <content here>
-
-        BACKGROUND
-        <content here>
-
-        KEY TERMS
-        - **<bullet list of terms, bolding the term>**
-
-        MAIN DOCUMENT
-        - [the title(s) of the main document(s), in bullet form and hyperlinked]
-
-        RELATED DOCUMENTS
-        <titles of related documents if any>
-        """
-        final_prompt = "given article : " + compressed_text_content + " with prompt  " + prompt_struc
+        final_prompt = "given article : " + text_content + " with prompt  " + prompt_struc
         
         try:
             response = client.chat.completions.create(
@@ -79,7 +55,7 @@ class OpenAIChatAPIPostView(APIView):
                     }
                 ],
                 max_tokens=2000,   
-                temperature=0.7,   
+                temperature=temperature,   
                 stop=None,   
             )
             title = client.chat.completions.create(
