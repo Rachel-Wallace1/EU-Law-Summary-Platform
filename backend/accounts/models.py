@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django_cryptography.fields import encrypt
 
 class CustomUser(AbstractUser):
     LEGAL_EXPERT = 1
@@ -16,7 +15,6 @@ class CustomUser(AbstractUser):
     }
 
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=False, null=True)
-    api_key = encrypt(models.CharField(max_length=50, null=True))
 
     email = models.EmailField(unique=True)
     USERNAME_FIELD = 'email'

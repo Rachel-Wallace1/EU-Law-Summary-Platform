@@ -122,50 +122,6 @@ class UpdateRole(views.APIView):
         except User.DoesNotExist:
             return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
 
-class UpdateApiKey(views.APIView):
-    """
-    Update a user's API key
-    """
-
-    @swagger_auto_schema(
-        responses={200: 'User updated', 404: 'User not found'}
-    )
-
-    @csrf_exempt
-    def post(self, request):
-        id = request.data.get('id')
-        api_key = request.data.get('api_key')
-
-        try:
-            user = User.objects.get(id=id)
-            user.api_key = api_key
-            user.save()
-            return Response({'message': 'User api_key updated'}, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
-
-class GetApiKey(views.APIView):
-    """
-    Fetch a user's API key
-    """
-
-    @swagger_auto_schema(
-        responses={200: 'User key found', 404: 'User / key not found'}
-    )
-
-    @csrf_exempt
-    def post(self, request):
-        id = request.data.get('id')
-
-        try:
-            user = User.objects.get(id=id)
-            if user.api_key is not None:
-                return Response({'api_key' : user.api_key}, status=status.HTTP_200_OK)
-            else:
-                return Response({'message': 'No key found'}, status=status.HTTP_404_NOT_FOUND)
-        except User.DoesNotExist:
-            return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
-
 class Users(views.APIView):
     """
     Fetch all users
