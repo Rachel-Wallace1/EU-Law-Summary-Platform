@@ -24,24 +24,24 @@ function NavBar() {
                                     <Link to="/summaries" className="nav-link">View Summaries</Link>
                                 </Nav.Link>
                                 {/* if user role is an EDITOR only show Generate Summaries and Settings Links */}
-                                {userRole === UserRole.EDITOR && (
+                                {(userRole === UserRole.EDITOR || userRole === UserRole.MANAGER || userRole === UserRole.LEGAL_EXPERT)&& (
                                     <>
                                         <Nav.Link as="div">
                                             <Link to="/generate_new_summary" className="nav-link">Generate
                                                 Summaries</Link>
                                         </Nav.Link>
-                                        <Nav.Link as="div">
-                                            <Link to="/settings" className="nav-link">Settings</Link>
-                                        </Nav.Link>
                                     </>
-                                )
-                                }
+                                )}
+                                
                                 {/* if user role is an MANAGER only show Manager View */}
                                 {userRole === UserRole.MANAGER &&
                                     <Nav.Link as="div">
                                         <Link to="/manager" className="nav-link">Manager View</Link>
                                     </Nav.Link>
                                 }
+                                <Nav.Link as="div">
+                                    <Link to="/settings" className="nav-link">Settings</Link>
+                                </Nav.Link>
                                 <Nav.Link as="div"> {/* if isLoggedIn show LogOut */}
                                     <LogOut/>
                                 </Nav.Link>

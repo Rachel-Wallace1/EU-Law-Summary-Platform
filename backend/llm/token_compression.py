@@ -2,11 +2,11 @@ from llmlingua import PromptCompressor
 from transformers import BertModel,BertTokenizer
 import logging
 
-def llmlingua_style_compress(prompt):
+def llmlingua_style_compress(prompt, tokenCompressionRange):
     logging.getLogger("pytorch_pretrained_bert.tokenization").setLevel(logging.ERROR)
     llm_lingua = PromptCompressor(
         model_name="microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
-        use_llmlingua2=True, # Whether to use llmlingua-2
+        use_llmlingua2=True,  
         device_map="cpu"
     )
     model_class, tokenizer_class, pretrained_weights = BertModel, BertTokenizer, 'bert-base-uncased'
@@ -22,6 +22,6 @@ def llmlingua_style_compress(prompt):
     truncated_prompt = tokenizer.decode(truncated_input_ids)
 
 
-    compressed_prompt = llm_lingua.compress_prompt(truncated_prompt, rate=0.33, force_tokens = ['\n', '?'])
-    # print(compressed_prompt)
+    compressed_prompt = llm_lingua.compress_prompt(truncated_prompt, rate=tokenCompressionRange, force_tokens = ['\n', '?'])
+    #print(compressed_prompt)
     return compressed_prompt['compressed_prompt']

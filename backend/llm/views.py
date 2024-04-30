@@ -36,8 +36,11 @@ class OpenAIChatAPIPostView(APIView):
 
         apiToken = request.data.get('apiToken', '')
         user_input = request.data.get('input_message', '')
-        token_compression = bool(request.data.get('tokenCompression', False))
+        token_compression = request.data.get('tokenCompression')
         temperature = request.data.get('temperature', 0.7)
+        model = request.data.get('model', 'gpt-3.5-turbo')
+        tokenCompressionRange = request.data.get('tokenCompressionRange', 0.3)
+        
 
         client = OpenAI(
             # This is the default and can be omitted
@@ -48,17 +51,15 @@ class OpenAIChatAPIPostView(APIView):
         content = check_url_content(url)
         text_content = get_text_content(content)
         celex = get_celex(url)
-
-        if token_compression:
-            text_content = llmlingua_style_compress(text_content)
-            
+        if token_compression == 'true':
+            text_content = llmlingua_style_compress(text_content, float(tokenCompressionRange))
+        
         prompt_struc = prompt_styling()
 
         final_prompt = "given article : " + text_content + " with prompt  " + prompt_struc
-        
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",   
+                model=model,   
                 messages=[
                     {
                         "role": "user",
