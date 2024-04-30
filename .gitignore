@@ -16,3 +16,23 @@ ec2-ssh.pem
 backend/staticfiles/
 backend/db.sqlite3
 .my_pgpass
+
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Exclude any .tfvars files that are intended to be kept secret
+*.tfvars
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+**/.terraform.lock.hcl
