@@ -50,10 +50,10 @@ function ManagerView() {
                 </Col>
                 <Col xs={12} md={9} lg={10}>
                     <PageHeaderComponent title='Manager Settings'/>
-                    {activeLink === "users" && <UserTableComponent/>} {/* if activeLink is users then display UserTableComponent */}
+                    {activeLink === "users" && <UserTableComponent/>}
 
                     {/* ManagerTasksComponent renders the statuses columns with appropriate grouped summaries and enables dragging and dropping using atlassian @hello-pangea/dnd (used by JIRA) */}
-                    {activeLink === "tasks" && <ManagerTasksComponent/>} {/* if activeLink is tasks then display ManagerTasksComponent */}
+                    {activeLink === "tasks" && <ManagerTasksComponent/>}
                 </Col>
             </Row>
         </Container>

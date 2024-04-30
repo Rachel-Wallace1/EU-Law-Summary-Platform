@@ -31,13 +31,15 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 function TaskCard({title, tasks, droppableId}) {
     return (
-        <Droppable droppableId={droppableId}> {/* area where we can drop draggables */}
+         // area where we can drop draggables
+        <Droppable droppableId={droppableId}>
             {(provided, snapshot) => (
                 <Card ref={provided.innerRef} {...provided.droppableProps}>
                     <Card.Header>{title}</Card.Header>
+                     {/*area where we drag draggables */}
                     <Card.Body>
                         {tasks.map((task, index) => (
-                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>  {/* area where we drag draggables */}
+                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
                                 {(provided, snapshot) => (
                                     <Card
                                         ref={provided.innerRef}
