@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const CSRFTokenContext = createContext(); // creates context
 
@@ -20,6 +21,7 @@ export const CSRFTokenProvider = ({ children }) => {
                 }
                 const data = await response.json();
                 setCSRFToken(data.csrfToken); // state is updated
+                Cookies.set('csrftoken', data.csrfToken, {expires: 1, path: '/'});
             } catch (error) {
                 console.error("Could not fetch CSRF token", error);
             }

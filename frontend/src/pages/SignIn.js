@@ -48,7 +48,7 @@ function SignIn() {
                 // update isLoggedIn with true, update user data, and navigate to /summaries page
                 setIsLoggedIn(true);
                 setUser(data.user_data)
-                navigate('/summaries');
+                window.location.href = '/summaries'
             })
             .catch((error) => {
                 console.error('Error:', error);
