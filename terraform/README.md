@@ -1,39 +1,51 @@
 # Automated AWS Service Installation with Terraform
-1. Install Terraform:
-Download Terraform from the official website and follow the installation instructions.
+1. [Install Terraform](https://developer.hashicorp.com/terraform/install)
 
 2. Set Up AWS Credentials:
-Run aws configure and ensure you have Administrator Access credentials configured.
+```bash
+aws configure
+```
 
-3. Initialize Terraform, Plan, and Apply Changes:
-Note: Depending on your role, set up your Terraform environment in either developer-terraform or system-admin-terraform folders. Apply step 3 accordingly.
+3. Based on your role, choose the appropriate Terraform environment folder: developer-terraform for developers or system-admin-terraform for system administrators.
+- For developer setup, navigate to the terraform-developer folder and set up EC2, DocumentDB, and PostgreSQL:
+```bash
+cd terraform-developer
+```
+- For system administrators responsible for setting up all AWS components, navigate to the terraform-system-admin folder:
+```bash
+cd terraform-system-admin
+```
 
+4. Initialize Terraform, Plan, and Apply Changes:
 - Navigate to your Terraform configuration directory:
 ```bash
 terraform init
 terraform plan
 terraform apply
 ```
-4. Clean Up:
+5. Clean Up:
 ```bash
 terraform destroy
 ```
 
-# Manual Installation of AWS Services
+# Manual Method: Installation of AWS Services
 
-# AWS Deployment Guide
 This guide provides instructions for deploying applications to Amazon ECR and Amazon ECS using GitHub Actions.
+- [x] ECR
+- [x] Task Definition and ECS
+- [x] DocumentDB
+- [x] RDS Postgresql
+- [x] DocumentDB
+- [x] Security Group, Load Balancer
+- [x] ACM, Route53
+
 
 1. Create ECR for frontend and backend app
 
-- Navigate to the ECR console in the AWS Management Console.
-Click on "Create repository."
-- Enter a name for the repository and optional tags.
-Click on "Create repository."
-- Repeat these steps to create a separate ECR repository for each of your applications.
+- Navigate to the ECR console in the AWS Management Console: Click on "Create repository."
 
 
-2. Create 2 Task Definitions (one for the backend Python application and one for the frontend React application)
+2. Create Task Definitions for frontend and backend app
 
 - Navigate to the ECS console in the AWS Management Console.
 In the Task Definitions section, click on "Create new Task Definition."
@@ -43,9 +55,6 @@ In the Task Definitions section, click on "Create new Task Definition."
 - Repeat these steps to create a separate task definition for each of your applications.
 
 3. Create 2 ECS Instances 
-(one for the backend Python application and one for the frontend React application)
-
-To create ECS instances, follow these steps:
 
 - Navigate to the ECS console in the AWS Management Console.
 In the Clusters section, select the cluster where you want to add instances or create a new cluster.
@@ -55,8 +64,11 @@ Choose the EC2 Linux + Networking or EC2 Windows + Networking launch type.
 - Review and create the cluster.
 
 
-4. Create Security Group
-To create a security group for your ECS instances and load balancer, follow these steps:
+4. Create 1 PostgreSQL Instance
+
+5. Create 1 DocumentDB Instance
+
+6. Create Security Group
 
 - Navigate to the EC2 console in the AWS Management Console.
 In the left navigation pane, click on "Security Groups" under the "Network & Security" section.
@@ -64,17 +76,12 @@ In the left navigation pane, click on "Security Groups" under the "Network & Sec
 - Configure the security group settings, including name, description, VPC, inbound and outbound rules.
 - Review and create the security group.
 
-5. Create Load Balancer
-To create a load balancer for distributing traffic to your ECS instances, follow these steps:
+7. Create Load Balancer
 
-- Navigate to the EC2 console in the AWS Management Console.
-In the left navigation pane, click on "Load Balancers" under the "Load Balancing" section.
-- Click on "Create Load Balancer."
-- Choose the load balancer type (Application Load Balancer or Network Load Balancer).
-- Configure the load balancer settings, including name, scheme, listeners, subnets, security groups, etc.
-- Review and create the load balancer.
+- Please refer to the AWS Doc for [Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancer-getting-started.html#prerequisites)
 
+8. Create ACM
+- Please refer to the AWS Doc for [ACM](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html)
 
-6. Create 1 postgres instance
-
-7. Create 1 documentdb instance
+9. Route 53 
+- Please refer to the AWS Doc for [Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html#domain-register-procedure-section)
