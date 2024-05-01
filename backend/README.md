@@ -11,30 +11,63 @@
 ```python3 manage.py runserver```
 
 
-# Current process to run llm
+# Current process to connect to DBs
+
+The two databases that are used are DocumentDB and Postgres. They are both hosted on AWS, and as a result, the only way to connect to them is on an ec2 instance. If you would like to run the code on an ec2 instance, then you can do so and perform testing in the cloud.
+
+Alternatively, if development is to be done locally then it is possible to port forward from a development computer to an ec2 instance with access to the databases.
+
+In `documentdb.py` you can comment out the `mongoinstance` and `mongoquerystring` lines depending on if you are doing development locally or if the code is running on ec2
 
 1. Port forward ssh
 
-Set the system environment variables in the bin/activate file
+Set the system environment variables in the bin/activate file for your python venv. This makes it so you dont have to set them each time manually.
 
+they should look roughly like this:
 ```shell
 export mongouser='xx'
 export mongopass='xx'
 
+export mongoinstance='docdb-xxxx.us-east-1.docdb.amazonaws.com:27017'
 export mongolocal='127.0.0.1:27017'
 
+export mongoquerystring='tls=true&tlsCAFile=backend/global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false'
 export mongoquerystringlocal='tls=true&tlsCAFile=backend/global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false&tlsInsecure=true&directConnection=true'
 
 export ec2instance='ssm-user@xxxx.compute-1.amazonaws.com'
 export docdbinstance='27017:xxxxx.xxxx.us-east-1.docdb.amazonaws.com:27017'
 export rdsinstance='5432:user-accounts-database.xxxxxx.us-east-1.rds.amazonaws.com:5432'
-
 ```
 
-and then make sure you have the key available
+You will also need 2 files [configured according to the Django documentation](https://docs.djangoproject.com/en/4.0/ref/databases/#postgresql-connection-settings) to connenct to postgres database.
+
+Those being:
+
+`.pg_service.conf` which lives in your `$HOME` directory
+
+```shell
+[db_service]
+host=localhost
+user=postgres
+dbname=postgres
+port=5432
+```
+and `.my_pgpass` which lives in the `/backend/` folder of this project
+
+```shell
+localhost:5432:postgres:postgres:<password>
+```
+
+and then make sure you have your ssh key available to log into the ec2 instance.
+
+In two seperate terminal windows, start these commands. They should hang once they are connected to the ec2 instance
 
 ```shell
 ssh -i "path/to/ky/ec2 ssh.pem" -L $docdbinstance $ec2instance -N
+```
+
+```shell
+ssh -i "path/to/ky/ec2 ssh.pem" -L $rdsinstance $ec2instance -N
 ```
 
 2. Run python server

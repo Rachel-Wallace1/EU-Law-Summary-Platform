@@ -170,15 +170,3 @@ class UserDelete(views.APIView):
             return Response({'message': 'User deleted'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'message': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
-
-# method to see all users in the database
-# TODO:
-
-
-
-# method to log out all users in the database
-# TODO:
-
-
-# method to delete all users in the database for debugging
-# TODO
