@@ -15,7 +15,7 @@ function GenerateNewSummaryComponent({document}) {
     const [celexNumber, setCelexNumber] = useState('');
     const [title, setTitle] = useState('');
     const [saved, setSaved] = useState(false);
-    const [apiToken, setApiToken] = useState('');
+    const [apiToken, setApiToken] = useState(localStorage.getItem('openai_key'));
     const [loading, setLoading] = useState(false);
     const openai_key= localStorage.getItem('openai_key');
     const {csrfToken} = useCSRFToken();
@@ -65,7 +65,7 @@ function GenerateNewSummaryComponent({document}) {
                     model: `${model}`,
                     tokenCompression: `${tokenCompression}`,
                     tokenCompressionRange: `${tokenCompressionRange}`,
-                    apiToken:`${openai_key}`,
+                    apiToken:`${apiToken}`,
                     temperature: `${temperature}`,
                 })
             });
